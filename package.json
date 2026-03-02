@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@prisma/client": "^5.10.2",
     "bcryptjs": "^2.4.3",
     "next": "14.1.0",
     "next-auth": "^4.24.5",
@@ -16,6 +17,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "prisma": "^5.10.2",
     "typescript": "^5.3.3"
   }
 }
