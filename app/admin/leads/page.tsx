@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function LeadsPage() {
-  const leads = await prisma.lead.findMany({
+const leads = await prisma.Lead.findMany({
     orderBy: { createdAt: "desc" },
   });
 
