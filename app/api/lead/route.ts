@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const lead = await prisma.Lead.create({
+const lead = await prisma.lead.create({
       data: {
         name: body.name,
         mobile: body.mobile,
