@@ -14,11 +14,29 @@ export default function HomePage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log("Lead Data:", form);
+  const handleSubmit = async (e: any) => {
+  e.preventDefault();
+
+  const res = await fetch("/api/lead", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: form.name,
+      mobile: form.phone,
+      address: form.address,
+      quantity: form.quantity,
+      time: form.timeSlot,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
     alert("Thank you! We will contact you shortly.");
-  };
+  } else {
+    alert("Something went wrong.");
+  }
+};
 
   return (
     <div style={{ padding: "40px", maxWidth: "500px", margin: "auto" }}>
