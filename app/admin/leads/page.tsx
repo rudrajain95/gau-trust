@@ -4,21 +4,33 @@ import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
+
 export default async function LeadsPage() {
+
   const leads = await prisma.lead.findMany({
     orderBy: { createdAt: "desc" },
   });
 
-async function updateStatus(id: string, status: string) {
-  "use server";
+  async function deleteLead(id: string) {
+    "use server";
 
-  await prisma.lead.update({
-    where: { id },
-    data: { status },
-  });
+    await prisma.lead.delete({
+      where: { id },
+    });
 
-  revalidatePath("/admin");
-}
+    revalidatePath("/admin");
+  }
+
+  async function updateStatus(id: string, status: string) {
+    "use server";
+
+    await prisma.lead.update({
+      where: { id },
+      data: { status },
+    });
+
+    revalidatePath("/admin");
+  }
 
   return (
     <div style={{ padding: 16, fontFamily: "Arial" }}>
@@ -87,19 +99,23 @@ async function updateStatus(id: string, status: string) {
                   {l.time}
                 </td>
 
-               <td style={{ border: "1px solid #ddd", padding: 8 }}>
-  <form action={updateStatus.bind(null, l.id, "Trial")} style={{ display: "inline" }}>
-    <button>Trial</button>
-  </form>
+                <td style={{ border: "1px solid #ddd", padding: 8 }}>
+                  <form action={updateStatus.bind(null, l.id, "Trial")} style={{ display: "inline" }}>
+                    <button>Trial</button>
+                  </form>
 
-  <form action={updateStatus.bind(null, l.id, "Active")} style={{ display: "inline", marginLeft: 5 }}>
-    <button style={{ background: "green", color: "white" }}>Active</button>
-  </form>
+                  <form action={updateStatus.bind(null, l.id, "Active")} style={{ display: "inline", marginLeft: 5 }}>
+                    <button style={{ background: "green", color: "white" }}>
+                      Active
+                    </button>
+                  </form>
 
-  <form action={updateStatus.bind(null, l.id, "Cancelled")} style={{ display: "inline", marginLeft: 5 }}>
-    <button style={{ background: "gray", color: "white" }}>Cancel</button>
-  </form>
-</td>
+                  <form action={updateStatus.bind(null, l.id, "Cancelled")} style={{ display: "inline", marginLeft: 5 }}>
+                    <button style={{ background: "gray", color: "white" }}>
+                      Cancel
+                    </button>
+                  </form>
+                </td>
 
                 <td style={{ border: "1px solid #ddd", padding: 8 }}>
                   <form action={deleteLead.bind(null, l.id)}>
@@ -119,6 +135,7 @@ async function updateStatus(id: string, status: string) {
               </tr>
             ))}
           </tbody>
+
         </table>
       </div>
     </div>
