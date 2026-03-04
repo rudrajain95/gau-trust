@@ -9,11 +9,12 @@ export default async function LeadsPage() {
     orderBy: { createdAt: "desc" },
   });
 
-async function deleteLead(id: string) {
+async function updateStatus(id: string, status: string) {
   "use server";
 
-  await prisma.lead.delete({
+  await prisma.lead.update({
     where: { id },
+    data: { status },
   });
 
   revalidatePath("/admin");
@@ -86,9 +87,19 @@ async function deleteLead(id: string) {
                   {l.time}
                 </td>
 
-                <td style={{ border: "1px solid #ddd", padding: 8 }}>
-                  Trial
-                </td>
+               <td style={{ border: "1px solid #ddd", padding: 8 }}>
+  <form action={updateStatus.bind(null, l.id, "Trial")} style={{ display: "inline" }}>
+    <button>Trial</button>
+  </form>
+
+  <form action={updateStatus.bind(null, l.id, "Active")} style={{ display: "inline", marginLeft: 5 }}>
+    <button style={{ background: "green", color: "white" }}>Active</button>
+  </form>
+
+  <form action={updateStatus.bind(null, l.id, "Cancelled")} style={{ display: "inline", marginLeft: 5 }}>
+    <button style={{ background: "gray", color: "white" }}>Cancel</button>
+  </form>
+</td>
 
                 <td style={{ border: "1px solid #ddd", padding: 8 }}>
                   <form action={deleteLead.bind(null, l.id)}>
