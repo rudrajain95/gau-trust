@@ -1,8 +1,9 @@
 export const dynamic = "force-dynamic";
+
 import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
-
 export default async function LeadsPage() {
   const leads = await prisma.lead.findMany({
     orderBy: { createdAt: "desc" },
@@ -14,6 +15,8 @@ async function deleteLead(id: string) {
   await prisma.lead.delete({
     where: { id },
   });
+
+  revalidatePath("/admin");
 }
 
   return (
