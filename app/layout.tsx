@@ -1,6 +1,6 @@
 export const metadata = {
  title: "Gau Trust Milk - Fresh Milk Delivery Chhatarpur",
-  description: "Premium Dairy Marketplace",
+ description: "Gau Trust Milk - Fresh Milk Delivery Service",
   verification: {
     google: "dpwXPKxiCgb2PmMek9EoNGXKKzKul6aqYr-sMO--iJI",
   },
