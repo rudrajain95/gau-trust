@@ -8,12 +8,13 @@ export default async function LeadsPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  async function deleteLead(id: number) {
-    "use server";
-   await prisma.lead.delete({
-  where: { id },
-});
-  }
+async function deleteLead(id: string) {
+  "use server";
+
+  await prisma.lead.delete({
+    where: { id },
+  });
+}
 
   return (
     <div style={{ padding: 16, fontFamily: "Arial" }}>
