@@ -14,5 +14,6 @@ model Lead {
   address   String
   quantity  String
   time      String
+  status    String   @default("Trial")
   createdAt DateTime @default(now())
 }
