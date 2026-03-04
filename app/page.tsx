@@ -40,7 +40,7 @@ export default function HomePage() {
 
   return (
     <div style={{ padding: "40px", maxWidth: "500px", margin: "auto" }}>
-      <h1>🐄 Gau Trust</h1>
+     <h1>🐄 Gau Trust Milk</h1>
       <p>7 Day FREE Fresh Milk Delivery Trial</p>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
