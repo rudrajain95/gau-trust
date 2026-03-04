@@ -10,9 +10,9 @@ export default async function LeadsPage() {
 
   async function deleteLead(id: number) {
     "use server";
-    await prisma.lead.delete({
-      where: { id },
-    });
+   await prisma.lead.delete({
+  where: { id: Number(id) },
+});
   }
 
   return (
