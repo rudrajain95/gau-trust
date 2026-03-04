@@ -1,6 +1,9 @@
 export const metadata = {
   title: "Gau Trust",
   description: "Premium Dairy Marketplace",
+  verification: {
+    google: "dpwXPKxiCgb2PmMek9EoNGXKKzKul6aqYr-sMO--iJI",
+  },
 };
 
 export default function RootLayout({
