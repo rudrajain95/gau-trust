@@ -9,10 +9,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body style={{ margin: 0, fontFamily: "sans-serif" }}>
-        {children}
-      </body>
-    </html>
-  );
-}
+   <html lang="en">
+
+<head>
+<meta name="google-site-verification" content="dpwXPKxiCgb2PmMek9EoNGXKKzKul6aqYr-sMO--iJI" />
+</head>
+
+<body style={{ margin: 0, fontFamily: "sans-serif" }}>
+{children}
+</body>
+
+</html>
