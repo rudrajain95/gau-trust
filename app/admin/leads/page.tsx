@@ -99,23 +99,27 @@ export default async function LeadsPage() {
                   {l.time}
                 </td>
 
-                <td style={{ border: "1px solid #ddd", padding: 8 }}>
-                  <form action={updateStatus.bind(null, l.id, "Trial")} style={{ display: "inline" }}>
-                    <button>Trial</button>
-                  </form>
+               <td style={{ border: "1px solid #ddd", padding: 8 }}>
+  <div style={{ marginBottom: 6, fontWeight: "bold" }}>
+    {l.status || "Trial"}
+  </div>
 
-                  <form action={updateStatus.bind(null, l.id, "Active")} style={{ display: "inline", marginLeft: 5 }}>
-                    <button style={{ background: "green", color: "white" }}>
-                      Active
-                    </button>
-                  </form>
+  <form action={updateStatus.bind(null, l.id, "Trial")} style={{ display: "inline" }}>
+    <button>Trial</button>
+  </form>
 
-                  <form action={updateStatus.bind(null, l.id, "Cancelled")} style={{ display: "inline", marginLeft: 5 }}>
-                    <button style={{ background: "gray", color: "white" }}>
-                      Cancel
-                    </button>
-                  </form>
-                </td>
+  <form action={updateStatus.bind(null, l.id, "Active")} style={{ display: "inline", marginLeft: 5 }}>
+    <button style={{ background: "green", color: "white" }}>
+      Active
+    </button>
+  </form>
+
+  <form action={updateStatus.bind(null, l.id, "Cancelled")} style={{ display: "inline", marginLeft: 5 }}>
+    <button style={{ background: "gray", color: "white" }}>
+      Cancel
+    </button>
+  </form>
+</td>
 
                 <td style={{ border: "1px solid #ddd", padding: 8 }}>
                   <form action={deleteLead.bind(null, l.id)}>
