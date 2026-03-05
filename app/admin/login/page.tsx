@@ -1,61 +1,89 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+export default function AdminLogin() {
 
-  const handleLogin = () => {
-    const savedPass = localStorage.getItem("adminPass") || "GauTrust@123";
+  const [username,setUsername]=useState("")
+  const [password,setPassword]=useState("")
+  const [showReset,setShowReset]=useState(false)
+  const [newPass,setNewPass]=useState("")
 
-if (username === "admin" && password === savedPass) {
-  localStorage.setItem("adminLogged", "true");
-  router.push("/admin");
-} else {
-  alert("Invalid login");
-}
-  };
+  const login=()=>{
+    const saved=localStorage.getItem("adminPass") || "GauTrust@123"
+
+    if(username==="admin" && password===saved){
+      alert("Login Success")
+    }else{
+      alert("Wrong login")
+    }
+  }
+
+  const savePassword=()=>{
+    localStorage.setItem("adminPass",newPass)
+    alert("Password updated")
+    setShowReset(false)
+  }
+
+  if(showReset){
+    return(
+      <div style={{padding:40,fontFamily:"Arial"}}>
+        <h2>Reset Admin Password</h2>
+
+        <input
+          type="password"
+          placeholder="New Password"
+          value={newPass}
+          onChange={(e)=>setNewPass(e.target.value)}
+          style={{display:"block",marginTop:10,padding:10,width:300}}
+        />
+
+        <button
+          onClick={savePassword}
+          style={{marginTop:15,padding:10,width:200,background:"green",color:"white",border:"none"}}
+        >
+          Save Password
+        </button>
+
+      </div>
+    )
+  }
 
   return (
-    <div style={{ padding: 40, fontFamily: "Arial", maxWidth: 400 }}>
+    <div style={{padding:40,fontFamily:"Arial"}}>
       <h2>Gau Trust Milk Admin Login</h2>
 
       <input
         placeholder="Username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ width: "100%", padding: 8, marginTop: 10 }}
+        onChange={(e)=>setUsername(e.target.value)}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       />
 
       <input
         type="password"
         placeholder="Password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", padding: 8, marginTop: 10 }}
+        onChange={(e)=>setPassword(e.target.value)}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       />
 
       <button
-        onClick={handleLogin}
-        style={{
-          marginTop: 15,
-          padding: 10,
-          width: "100%",
-          background: "green",
-          color: "white",
-          border: "none",
-        }}
+        onClick={login}
+        style={{marginTop:15,padding:10,width:200,background:"green",color:"white",border:"none"}}
       >
         Login
       </button>
 
-<p style={{ marginTop: 10 }}>
-  <a href="/admin/login/reset">Reset Password</a>
-</p>
+      <div style={{marginTop:15}}>
+        <a
+          href="#"
+          onClick={()=>setShowReset(true)}
+        >
+          Reset Password
+        </a>
+      </div>
 
-</div>
+    </div>
   );
 }
