@@ -1,66 +1,29 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-export default function ResetPassword() {
-
-  const router = useRouter();
-
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-
-  function changePassword() {
-
-    const saved = localStorage.getItem("adminPass") || "GauTrust@123";
-
-    if (oldPassword !== saved) {
-      alert("Wrong old password");
-      return;
-    }
-
-    localStorage.setItem("adminPass", newPassword);
-
-    alert("Password changed successfully");
-
-    router.push("/admin/login");
-  }
-
+export default function ResetPasswordPage() {
   return (
-    <div style={{ padding: 40, fontFamily: "Arial", maxWidth: 400 }}>
+    <div style={{padding:"40px",fontFamily:"Arial"}}>
+      <h1>Reset Admin Password</h1>
 
-      <h2>Reset Admin Password</h2>
+      <form method="POST" action="/api/reset-admin">
+        <input
+          name="username"
+          placeholder="Username"
+          style={{display:"block",marginBottom:"10px",padding:"10px",width:"300px"}}
+        />
 
-      <input
-        type="password"
-        placeholder="Old Password"
-        value={oldPassword}
-        onChange={(e) => setOldPassword(e.target.value)}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+        <input
+          name="password"
+          type="password"
+          placeholder="New Password"
+          style={{display:"block",marginBottom:"10px",padding:"10px",width:"300px"}}
+        />
 
-      <input
-        type="password"
-        placeholder="New Password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
-
-      <button
-        onClick={changePassword}
-        style={{
-          marginTop: 15,
-          width: "100%",
-          padding: 10,
-          background: "green",
-          color: "white",
-          border: "none"
-        }}
-      >
-        Change Password
-      </button>
-
+        <button
+          type="submit"
+          style={{padding:"10px 20px",background:"green",color:"white"}}
+        >
+          Change Password
+        </button>
+      </form>
     </div>
   );
 }
