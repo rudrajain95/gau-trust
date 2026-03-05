@@ -4,11 +4,16 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
+
   const router = useRouter();
 
-  useEffect(() => {
+  useEffect(()=>{
     router.push("/admin/login");
-  }, [router]);
+  },[]);
 
-  return <div style={{padding:20}}>Redirecting to login...</div>;
+  return (
+    <div style={{padding:40}}>
+      Redirecting to login...
+    </div>
+  );
 }
