@@ -1,8 +1,13 @@
 "use client";
 
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminLogin() {
+
+  const router = useRouter();
 
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
@@ -12,11 +17,11 @@ export default function AdminLogin() {
   const login=()=>{
     const saved=localStorage.getItem("adminPass") || "GauTrust@123"
 
-    if(username==="admin" && password===saved){
-      alert("Login Success")
-    }else{
-      alert("Wrong login")
-    }
+   if(username==="admin" && password===saved){
+  router.push("/admin/dashboard")
+}else{
+  alert("Wrong login")
+}
   }
 
   const savePassword=()=>{
