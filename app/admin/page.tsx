@@ -3,22 +3,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AdminHome() {
+export default function AdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const logged = localStorage.getItem("adminLogged");
-
-    if (!logged) {
-      router.push("/admin/login");
-    } else {
-      router.push("/admin/leads");
-    }
+    router.push("/admin/login");
   }, [router]);
 
-  return (
-    <div style={{ padding: 20, fontFamily: "Arial" }}>
-      Checking login...
-    </div>
-  );
+  return <div style={{padding:20}}>Redirecting to login...</div>;
 }
