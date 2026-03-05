@@ -9,12 +9,14 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = () => {
-    if (username === "admin" && password === "GauTrust@123") {
-      localStorage.setItem("adminLogged", "true");
-      router.push("/admin");
-    } else {
-      alert("Invalid login");
-    }
+    const savedPass = localStorage.getItem("adminPass") || "GauTrust@123";
+
+if (username === "admin" && password === savedPass) {
+  localStorage.setItem("adminLogged", "true");
+  router.push("/admin");
+} else {
+  alert("Invalid login");
+}
   };
 
   return (
@@ -49,6 +51,11 @@ export default function LoginPage() {
       >
         Login
       </button>
-    </div>
+
+<p style={{ marginTop: 10 }}>
+  <a href="/admin/login/reset">Reset Password</a>
+</p>
+
+</div>
   );
 }
