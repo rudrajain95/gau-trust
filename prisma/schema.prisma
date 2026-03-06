@@ -24,6 +24,7 @@ model Order {
   address   String
   product   String
   quantity  String
+  payment   String
   status    String   @default("Pending")
   createdAt DateTime @default(now())
 }
