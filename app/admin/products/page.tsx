@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { PrismaClient } from "@prisma/client";
-
+import Link from "next/link"
 const prisma = new PrismaClient();
 
 export default async function ProductsPage() {
@@ -13,18 +13,19 @@ export default async function ProductsPage() {
   return (
     <div style={{padding:20,fontFamily:"Arial"}}>
       <h1>Gau Trust Milk - Products</h1>
+<Link href="/admin/products/add">
 <button
 style={{
-marginTop:20,
-padding:10,
-background:"green",
-color:"white",
-border:"none"
+ marginTop:20,
+ padding:10,
+ background:"green",
+ color:"white",
+ border:"none"
 }}
-onclick={() => window.location.href="/admin/products/add"}
 >
 Add Product
 </button>
+</Link>
       <table style={{
         width:"100%",
         borderCollapse:"collapse",
