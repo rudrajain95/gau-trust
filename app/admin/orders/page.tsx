@@ -1,94 +1,142 @@
 export const dynamic = "force-dynamic";
 
 import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
 export default async function OrdersPage() {
-
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: "desc" }
   });
 
+  async function updateStatus(id: string, status: string) {
+    "use server";
+
+    await prisma.order.update({
+      where: { id },
+      data: { status }
+    });
+
+    revalidatePath("/admin/orders");
+  }
+
   return (
     <div style={{ padding: 20, fontFamily: "Arial" }}>
-
       <h1>Customer Orders</h1>
 
-      <table style={{
-        width: "100%",
-        borderCollapse: "collapse",
-        marginTop: 20
-      }}>
-
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          marginTop: 20
+        }}
+      >
         <thead>
           <tr>
-            <th style={{border:"1px solid #ddd",padding:8}}>Time</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Name</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Mobile</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Product</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Qty</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Payment</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Address</th>
-            <th style={{border:"1px solid #ddd",padding:8}}>Call</th>
+            <th style={th}>Time</th>
+            <th style={th}>Name</th>
+            <th style={th}>Mobile</th>
+            <th style={th}>Product</th>
+            <th style={th}>Qty</th>
+            <th style={th}>Payment</th>
+            <th style={th}>Address</th>
+            <th style={th}>Status</th>
+            <th style={th}>Action</th>
           </tr>
         </thead>
 
         <tbody>
-
-          {orders.map((o:any) => (
-
+          {orders.map((o: any) => (
             <tr key={o.id}>
-
-              <td style={{border:"1px solid #ddd",padding:8}}>
+              <td style={td}>
                 {new Date(o.createdAt).toLocaleString()}
               </td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                {o.name}
+              <td style={td}>{o.name}</td>
+
+              <td style={td}>
+                <a href={`tel:${o.mobile}`}>{o.mobile}</a>
               </td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                {o.mobile}
-              </td>
+              <td style={td}>{o.product}</td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                {o.product}
-              </td>
+              <td style={td}>{o.quantity}</td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                {o.quantity}
-              </td>
+              <td style={td}>{o.payment}</td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                {o.payment}
-              </td>
+              <td style={td}>{o.address}</td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                {o.address}
-              </td>
+              <td style={td}>{o.status}</td>
 
-              <td style={{border:"1px solid #ddd",padding:8}}>
-                <a href={`tel:${o.mobile}`}>
-                  <button style={{
-                    padding:"6px 10px",
-                    background:"green",
-                    color:"white",
-                    border:"none"
-                  }}>
-                    Call
-                  </button>
-                </a>
-              </td>
+              <td style={td}>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <a href={`tel:${o.mobile}`}>
+                    <button style={callBtn}>Call</button>
+                  </a>
 
+                  <form action={updateStatus.bind(null, o.id, "Confirmed")}>
+                    <button style={confirmBtn}>Confirm</button>
+                  </form>
+
+                  <form action={updateStatus.bind(null, o.id, "Delivered")}>
+                    <button style={deliverBtn}>Delivered</button>
+                  </form>
+
+                  <form action={updateStatus.bind(null, o.id, "Cancelled")}>
+                    <button style={cancelBtn}>Cancel</button>
+                  </form>
+                </div>
+              </td>
             </tr>
-
           ))}
-
         </tbody>
-
       </table>
-
     </div>
   );
 }
+
+const th = {
+  border: "1px solid #ddd",
+  padding: 8,
+  background: "#f5f5f5",
+  textAlign: "left" as const
+};
+
+const td = {
+  border: "1px solid #ddd",
+  padding: 8,
+  verticalAlign: "top" as const
+};
+
+const callBtn = {
+  padding: "6px 10px",
+  background: "green",
+  color: "white",
+  border: "none",
+  cursor: "pointer"
+};
+
+const confirmBtn = {
+  padding: "6px 10px",
+  background: "blue",
+  color: "white",
+  border: "none",
+  cursor: "pointer"
+};
+
+const deliverBtn = {
+  padding: "6px 10px",
+  background: "green",
+  color: "white",
+  border: "none",
+  cursor: "pointer"
+};
+
+const cancelBtn = {
+  padding: "6px 10px",
+  background: "red",
+  color: "white",
+  border: "none",
+  cursor: "pointer"
+};
