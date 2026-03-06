@@ -12,7 +12,6 @@ export default function OrderPage() {
   const [payment,setPayment] = useState("Cash on Delivery")
 
   const submitOrder = async () => {
-const submitOrder = async () => {
 
   if(payment !== "Cash on Delivery"){
     alert("Online payment system coming soon. Please select Cash on Delivery.");
