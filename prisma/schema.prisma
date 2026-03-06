@@ -36,3 +36,13 @@ model Product {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 }
+model Customer {
+  id          String   @id @default(cuid())
+  name        String
+  mobile      String   @unique
+  address     String
+  trialStart  DateTime?
+  trialEnd    DateTime?
+  subscription Boolean @default(false)
+  createdAt   DateTime @default(now())
+}
