@@ -1,117 +1,140 @@
-"use client";
-
 export default function HomePage() {
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", color: "#222" }}>
-      {/* Header */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "18px 30px",
-          borderBottom: "1px solid #ddd",
-          background: "#fff",
-          position: "sticky",
-          top: 0,
-          zIndex: 10,
-        }}
-      >
-        <h2 style={{ margin: 0, color: "green" }}>Gau Trust Milk</h2>
-
-        <div style={{ display: "flex", gap: 10 }}>
-          <a href="#products">
-            <button style={{ padding: "10px 14px", border: "1px solid #ccc" }}>
-              Products
-            </button>
-          </a>
-          <a href="#order">
-            <button
-              style={{
-                padding: "10px 14px",
-                background: "green",
-                color: "white",
-                border: "none",
-              }}
-            >
-              Order Now
-            </button>
-          </a>
-          <a href="/admin/login">
-            <button
-              style={{
-                padding: "10px 14px",
-                background: "black",
-                color: "white",
-                border: "none",
-              }}
-            >
-              Admin Login
-            </button>
-          </a>
-        </div>
-      </header>
-
-      {/* Hero Section */}
+    <main style={{ fontFamily: "Arial, sans-serif", background: "#f8f8f8", color: "#111" }}>
       <section
         style={{
-          padding: "60px 30px",
+          padding: "60px 20px",
           textAlign: "center",
-          background: "#f7fff7",
+          background: "#ffffff",
+          borderBottom: "1px solid #ddd",
         }}
       >
-        <h1 style={{ fontSize: 42, marginBottom: 15 }}>
-          Fresh Dairy Products Delivered to Your Home
-        </h1>
-        <p style={{ fontSize: 18, maxWidth: 700, margin: "0 auto 25px" }}>
-          Gau Trust Milk brings fresh milk, paneer, ghee, curd and butter to your doorstep
-          with trust, hygiene and timely delivery.
+        <h1 style={{ fontSize: "42px", marginBottom: 10 }}>Gau Trust Milk</h1>
+        <p style={{ fontSize: "18px", maxWidth: 700, margin: "0 auto", lineHeight: 1.6 }}>
+          Fresh milk and dairy products delivered with trust, quality and convenience.
         </p>
-        <a href="#order">
-          <button
+
+        <div style={{ marginTop: 30 }}>
+          <a
+            href="/order"
             style={{
+              display: "inline-block",
+              marginRight: 12,
               padding: "14px 24px",
               background: "green",
               color: "white",
-              border: "none",
-              fontSize: 16,
+              textDecoration: "none",
+              borderRadius: 6,
+              fontWeight: "bold",
             }}
           >
-            Start Ordering
-          </button>
-        </a>
+            Order Now
+          </a>
+
+          <a
+            href="/admin/login"
+            style={{
+              display: "inline-block",
+              padding: "14px 24px",
+              background: "#111",
+              color: "white",
+              textDecoration: "none",
+              borderRadius: 6,
+              fontWeight: "bold",
+            }}
+          >
+            Admin Login
+          </a>
+        </div>
       </section>
 
-      {/* About */}
-      <section style={{ padding: "50px 30px", maxWidth: 1100, margin: "0 auto" }}>
-        <h2>About Gau Trust Milk</h2>
-        <p style={{ lineHeight: 1.7 }}>
-          Gau Trust Milk is a modern dairy delivery brand focused on pure and fresh dairy
-          products. Our goal is to give families better quality milk and dairy products with
-          easy ordering, reliable delivery and trusted service.
+      <section style={{ padding: "50px 20px", maxWidth: 1100, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 32, marginBottom: 15 }}>About Gau Trust Milk</h2>
+        <p style={{ fontSize: 18, lineHeight: 1.7 }}>
+          Gau Trust Milk is focused on delivering fresh and quality dairy products directly to
+          customers. Our goal is to make daily milk delivery simple, reliable and professional.
         </p>
       </section>
 
-      {/* Products */}
-      <section
-        id="products"
-        style={{ padding: "50px 30px", background: "#fafafa" }}
+      <section style={{ padding: "20px", maxWidth: 1100, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 32, marginBottom: 20 }}>Our Products</h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: 16,
+          }}
+        >
+          {["Milk", "Paneer", "Ghee", "Curd", "Butter"].map((item) => (
+            <div
+              key={item}
+              style={{
+                background: "#fff",
+                border: "1px solid #ddd",
+                borderRadius: 8,
+                padding: 20,
+                textAlign: "center",
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section style={{ padding: "50px 20px", maxWidth: 1100, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 32, marginBottom: 20 }}>Why Choose Us</h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 16,
+          }}
+        >
+          <div style={{ background: "#fff", padding: 20, border: "1px solid #ddd", borderRadius: 8 }}>
+            <h3>Fresh Products</h3>
+            <p>Daily fresh dairy supply with focus on quality.</p>
+          </div>
+
+          <div style={{ background: "#fff", padding: 20, border: "1px solid #ddd", borderRadius: 8 }}>
+            <h3>Easy Ordering</h3>
+            <p>Customers can place orders online in a simple way.</p>
+          </div>
+
+          <div style={{ background: "#fff", padding: 20, border: "1px solid #ddd", borderRadius: 8 }}>
+            <h3>Trusted Delivery</h3>
+            <p>Fast and reliable local milk delivery service.</p>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "50px 20px", maxWidth: 1100, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 32, marginBottom: 15 }}>Contact</h2>
+        <p style={{ fontSize: 18, lineHeight: 1.7 }}>
+          Gau Trust Milk, Chhatarpur, Madhya Pradesh
+          <br />
+          Phone: +91 7024030008
+        </p>
+      </section>
+
+      <footer
+        style={{
+          marginTop: 40,
+          padding: 20,
+          textAlign: "center",
+          background: "#111",
+          color: "#fff",
+        }}
       >
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <h2>Our Products</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: 20,
-              marginTop: 20,
-            }}
-          >
-            {[
-              { name: "Milk", desc: "Fresh daily milk delivery" },
-              { name: "Paneer", desc: "Soft and fresh paneer" },
-              { name: "Ghee", desc: "Pure desi ghee" },
-              { name: "Curd", desc: "Fresh homemade style curd" },
+        © 2026 Gau Trust Milk. All rights reserved.
+      </footer>
+    </main>
+  );
+}              { name: "Curd", desc: "Fresh homemade style curd" },
               { name: "Butter", desc: "Quality dairy butter" },
             ].map((item) => (
               <div
