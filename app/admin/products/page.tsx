@@ -13,7 +13,18 @@ export default async function ProductsPage() {
   return (
     <div style={{padding:20,fontFamily:"Arial"}}>
       <h1>Gau Trust Milk - Products</h1>
-
+<button
+style={{
+marginTop:20,
+padding:10,
+background:"green",
+color:"white",
+border:"none"
+}}
+onclick={() => window.location.href="/admin/products/add"}
+>
+Add Product
+</button>
       <table style={{
         width:"100%",
         borderCollapse:"collapse",
