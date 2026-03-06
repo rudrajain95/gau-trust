@@ -1,56 +1,101 @@
 "use client";
+
 import { useState } from "react";
 
 export default function HomePage() {
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    quantity: "",
-    timeSlot: "",
-  });
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [address, setAddress] = useState("");
+  const [product, setProduct] = useState("Milk");
+  const [quantity, setQuantity] = useState("");
 
-  const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const submitOrder = async () => {
+    const res = await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        mobile,
+        address,
+        product,
+        quantity,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Order placed successfully");
+      setName("");
+      setMobile("");
+      setAddress("");
+      setProduct("Milk");
+      setQuantity("");
+    } else {
+      alert("Order failed");
+    }
   };
 
-  const handleSubmit = async (e: any) => {
-  e.preventDefault();
-
-  const res = await fetch("/api/lead", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: form.name,
-      mobile: form.phone,
-      address: form.address,
-      quantity: form.quantity,
-      time: form.timeSlot,
-    }),
-  });
-
-  const data = await res.json();
-
-  if (data.success) {
-    alert("Thank you! We will contact you shortly.");
-  } else {
-    alert("Something went wrong.");
-  }
-};
-
   return (
-    <div style={{ padding: "40px", maxWidth: "500px", margin: "auto" }}>
-     <h1>🐄 Gau Trust Milk</h1>
-      <p>7 Day FREE Fresh Milk Delivery Trial</p>
+    <div style={{ padding: 30, fontFamily: "Arial", maxWidth: 500 }}>
+      <h1>🥛 Gau Trust Milk</h1>
+      <h3>Fresh Dairy Products Order</h3>
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <input name="name" placeholder="Your Name" onChange={handleChange} required />
-        <input name="phone" placeholder="Mobile Number" onChange={handleChange} required />
-        <input name="address" placeholder="Address" onChange={handleChange} required />
-        <input name="quantity" placeholder="Milk Quantity (1L / 2L)" onChange={handleChange} required />
-        <input name="timeSlot" placeholder="Preferred Time (6-7AM)" onChange={handleChange} required />
-        <button type="submit">Start Free Trial</button>
-      </form>
+      <input
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        style={{ display: "block", width: "100%", padding: 10, marginTop: 10 }}
+      />
+
+      <input
+        placeholder="Mobile"
+        value={mobile}
+        onChange={(e) => setMobile(e.target.value)}
+        style={{ display: "block", width: "100%", padding: 10, marginTop: 10 }}
+      />
+
+      <input
+        placeholder="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        style={{ display: "block", width: "100%", padding: 10, marginTop: 10 }}
+      />
+
+      <select
+        value={product}
+        onChange={(e) => setProduct(e.target.value)}
+        style={{ display: "block", width: "100%", padding: 10, marginTop: 10 }}
+      >
+        <option>Milk</option>
+        <option>Paneer</option>
+        <option>Ghee</option>
+        <option>Curd</option>
+        <option>Butter</option>
+      </select>
+
+      <input
+        placeholder="Quantity (example: 2L / 1KG / 500gm)"
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
+        style={{ display: "block", width: "100%", padding: 10, marginTop: 10 }}
+      />
+
+      <button
+        onClick={submitOrder}
+        style={{
+          marginTop: 15,
+          padding: 12,
+          width: "100%",
+          background: "green",
+          color: "white",
+          border: "none",
+        }}
+      >
+        Place Order
+      </button>
     </div>
   );
 }
