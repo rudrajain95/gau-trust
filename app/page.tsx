@@ -19,7 +19,7 @@ export default function HomePage() {
           color:"white",
           border:"none"
         }}>
-          Order Milk
+          Customer Order
         </button>
       </a>
 
