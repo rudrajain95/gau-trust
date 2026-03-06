@@ -1,13 +1,20 @@
 "use client";
 
-export default function Dashboard(){
+import { useRouter } from "next/navigation";
 
-  return(
-    <div style={{padding:40,fontFamily:"Arial"}}>
+export default function Dashboard() {
+  const router = useRouter();
 
+  const logout = () => {
+    document.cookie = "admin_auth=; path=/; max-age=0";
+    router.push("/admin/login");
+  };
+
+  return (
+    <div style={{ padding: 40, fontFamily: "Arial" }}>
       <h1>Gau Trust Admin Dashboard</h1>
 
-      <hr/>
+      <hr />
 
       <h3>Milk Business Panel</h3>
 
@@ -15,29 +22,58 @@ export default function Dashboard(){
       <p>Selling Price: ₹60 / Litre</p>
       <p>Profit: ₹10 / Litre</p>
 
-      <br/>
+      <div style={{ marginTop: 20 }}>
+        <button
+          onClick={() => router.push("/admin/leads")}
+          style={{
+            padding: 10,
+            background: "green",
+            color: "white",
+            border: "none",
+            marginRight: 10,
+          }}
+        >
+          View Leads
+        </button>
 
-      <button style={{
-        padding:10,
-        background:"green",
-        color:"white",
-        border:"none"
-      }}>
-        Add Milk Product
-      </button>
+        <button
+          onClick={() => router.push("/admin/orders")}
+          style={{
+            padding: 10,
+            background: "orange",
+            color: "white",
+            border: "none",
+            marginRight: 10,
+          }}
+        >
+          View Orders
+        </button>
 
-      <br/><br/>
+        <button
+          onClick={() => router.push("/admin/delivery")}
+          style={{
+            padding: 10,
+            background: "blue",
+            color: "white",
+            border: "none",
+            marginRight: 10,
+          }}
+        >
+          Delivery Dashboard
+        </button>
 
-      <button style={{
-        padding:10,
-        background:"orange",
-        color:"white",
-        border:"none"
-      }}>
-        View Orders
-      </button>
-
+        <button
+          onClick={logout}
+          style={{
+            padding: 10,
+            background: "black",
+            color: "white",
+            border: "none",
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </div>
-  )
-
+  );
 }
