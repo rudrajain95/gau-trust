@@ -1,43 +1,60 @@
-"use client";
+export const dynamic = "force-dynamic";
 
-import { useRouter } from "next/navigation";
+import { PrismaClient } from "@prisma/client";
 
-export default function OrdersPage() {
-  const router = useRouter();
+const prisma = new PrismaClient();
+
+export default async function OrdersPage() {
+  const orders = await prisma.order.findMany({
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
-    <div style={{ padding: 40, fontFamily: "Arial" }}>
+    <div style={{ padding: 20, fontFamily: "Arial" }}>
       <h1>Gau Trust Milk - Orders</h1>
+      <p>Total Orders: {orders.length}</p>
 
-      <p>Total Orders: 0</p>
-      <p>Yahan customer ke milk, paneer, ghee, curd, butter orders show honge.</p>
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          marginTop: 20,
+        }}
+      >
+        <thead>
+          <tr>
+            {["Time", "Name", "Mobile", "Address", "Product", "Quantity", "Status"].map((h) => (
+              <th
+                key={h}
+                style={{
+                  border: "1px solid #ddd",
+                  padding: 8,
+                  textAlign: "left",
+                  background: "#f5f5f5",
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
 
-      <div style={{ marginTop: 20 }}>
-        <button
-          onClick={() => router.push("/admin/dashboard")}
-          style={{
-            padding: 10,
-            background: "black",
-            color: "white",
-            border: "none",
-            marginRight: 10,
-          }}
-        >
-          Back to Dashboard
-        </button>
-
-        <button
-          onClick={() => router.push("/admin/leads")}
-          style={{
-            padding: 10,
-            background: "green",
-            color: "white",
-            border: "none",
-          }}
-        >
-          Go to Leads
-        </button>
-      </div>
+        <tbody>
+          {orders.map((o) => (
+            <tr key={o.id}>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>
+                {new Date(o.createdAt).toLocaleString()}
+              </td>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>{o.name}</td>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>{o.mobile}</td>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>{o.address}</td>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>{o.product}</td>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>{o.quantity}</td>
+              <td style={{ border: "1px solid #ddd", padding: 8 }}>{o.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
