@@ -50,7 +50,8 @@ export default async function OrdersPage() {
           {orders.map((o: any) => (
             <tr key={o.id}>
               <td style={td}>
-                {new Date(o.createdAt).toLocaleString()}
+{new Date(o.createdAt).toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}
+                
               </td>
 
               <td style={td}>{o.name}</td>
