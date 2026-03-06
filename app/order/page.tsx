@@ -36,11 +36,13 @@ export default function OrderPage() {
   const data = await res.json()
 
   if(data.success){
-    alert("Order placed successfully")
-    setName("")
-    setMobile("")
-    setAddress("")
-    setQuantity("")
+  alert("Order placed successfully")
+  setName("")
+  setMobile("")
+  setAddress("")
+  setQuantity("")
+  setPayment("Cash on Delivery")
+}
   }else{
     alert("Order failed")
   }
