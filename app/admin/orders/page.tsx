@@ -4,54 +4,40 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default async function OrdersPage(){
+export default async function OrdersPage() {
 
   const orders = await prisma.order.findMany({
-    orderBy:{createdAt:"desc"}
-  })
+    orderBy: { createdAt: "desc" }
+  });
 
-  return(
-
-    <div style={{padding:20,fontFamily:"Arial"}}>
+  return (
+    <div style={{ padding: 20, fontFamily: "Arial" }}>
 
       <h1>Customer Orders</h1>
 
       <table style={{
-        width:"100%",
-        borderCollapse:"collapse",
-        marginTop:20
+        width: "100%",
+        borderCollapse: "collapse",
+        marginTop: 20
       }}>
 
         <thead>
-
           <tr>
-
-            {[
-              "Time",
-              "Name",
-              "Mobile",
-              "Product",
-              "Qty",
-              "Payment",
-              "Address",
-              "Action"
-            ].map((h)=>(
-              <th key={h} style={{
-                border:"1px solid #ddd",
-                padding:10,
-                background:"#f5f5f5"
-              }}>
-                {h}
-              </th>
-            ))}
-
+            <th style={{border:"1px solid #ddd",padding:8}}>Time</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Name</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Mobile</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Product</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Qty</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Payment</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Address</th>
+            <th style={{border:"1px solid #ddd",padding:8}}>Call</th>
           </tr>
-
         </thead>
 
         <tbody>
 
-          {orders.map((o)=>(
+          {orders.map((o:any) => (
+
             <tr key={o.id}>
 
               <td style={{border:"1px solid #ddd",padding:8}}>
@@ -63,9 +49,7 @@ export default async function OrdersPage(){
               </td>
 
               <td style={{border:"1px solid #ddd",padding:8}}>
-                <a href={`tel:${o.mobile}`}>
-                  {o.mobile}
-                </a>
+                {o.mobile}
               </td>
 
               <td style={{border:"1px solid #ddd",padding:8}}>
@@ -85,7 +69,6 @@ export default async function OrdersPage(){
               </td>
 
               <td style={{border:"1px solid #ddd",padding:8}}>
-
                 <a href={`tel:${o.mobile}`}>
                   <button style={{
                     padding:"6px 10px",
@@ -96,10 +79,10 @@ export default async function OrdersPage(){
                     Call
                   </button>
                 </a>
-
               </td>
 
             </tr>
+
           ))}
 
         </tbody>
@@ -107,7 +90,5 @@ export default async function OrdersPage(){
       </table>
 
     </div>
-
-  )
-
+  );
 }
