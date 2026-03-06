@@ -27,3 +27,11 @@ model Order {
   status    String   @default("Pending")
   createdAt DateTime @default(now())
 }
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  price     Float
+  unit      String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
