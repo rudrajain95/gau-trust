@@ -42,7 +42,6 @@ export default function OrderPage() {
   setAddress("")
   setQuantity("")
   setPayment("Cash on Delivery")
-}
   }else{
     alert("Order failed")
   }
