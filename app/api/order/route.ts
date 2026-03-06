@@ -1,27 +1,52 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
 
-    const order = await prisma.order.create({
+  const body = await req.json();
+
+  const { name, mobile, address, product, quantity, payment } = body;
+
+  // check customer exists
+  let customer = await prisma.customer.findUnique({
+    where: { mobile }
+  });
+
+  // if first order → create trial customer
+  if (!customer) {
+
+    const today = new Date();
+
+    const trialEnd = new Date();
+    trialEnd.setDate(today.getDate() + 7);
+
+    customer = await prisma.customer.create({
       data: {
-        name: body.name,
-        mobile: body.mobile,
-        address: body.address,
-        product: body.product,
-        quantity: body.quantity,
-      },
+        name,
+        mobile,
+        address,
+        trialStart: today,
+        trialEnd: trialEnd
+      }
     });
 
-    return NextResponse.json({ success: true, order });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, message: "Order create failed" },
-      { status: 500 }
-    );
   }
+
+  // create order
+  await prisma.order.create({
+    data: {
+      name,
+      mobile,
+      address,
+      product,
+      quantity,
+      payment
+    }
+  });
+
+  return Response.json({
+    success: true
+  });
+
 }
