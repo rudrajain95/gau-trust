@@ -12,36 +12,41 @@ export default function OrderPage() {
   const [payment,setPayment] = useState("Cash on Delivery")
 
   const submitOrder = async () => {
+const submitOrder = async () => {
 
-    const res = await fetch("/api/order",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-  name,
-  mobile,
-  address,
-  product,
-  quantity,
-  payment
-})
-    })
-
-    const data = await res.json()
-
-    if(data.success){
-      alert("Order placed successfully")
-      setName("")
-      setMobile("")
-      setAddress("")
-      setQuantity("")
-    }else{
-      alert("Order failed")
-    }
-
+  if(payment !== "Cash on Delivery"){
+    alert("Online payment system coming soon. Please select Cash on Delivery.");
+    return;
   }
 
+  const res = await fetch("/api/order",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      name,
+      mobile,
+      address,
+      product,
+      quantity,
+      payment
+    })
+  })
+
+  const data = await res.json()
+
+  if(data.success){
+    alert("Order placed successfully")
+    setName("")
+    setMobile("")
+    setAddress("")
+    setQuantity("")
+  }else{
+    alert("Order failed")
+  }
+
+}
   return(
 
     <div style={{padding:30,fontFamily:"Arial",maxWidth:500}}>
