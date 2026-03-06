@@ -17,3 +17,13 @@ model Lead {
   status    String   @default("Trial")
   createdAt DateTime @default(now())
 }
+model Order {
+  id        String   @id @default(cuid())
+  name      String
+  mobile    String
+  address   String
+  product   String
+  quantity  String
+  status    String   @default("Pending")
+  createdAt DateTime @default(now())
+}
