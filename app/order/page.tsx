@@ -9,6 +9,7 @@ export default function OrderPage() {
   const [address,setAddress] = useState("")
   const [product,setProduct] = useState("Milk")
   const [quantity,setQuantity] = useState("")
+  const [payment,setPayment] = useState("Cash on Delivery")
 
   const submitOrder = async () => {
 
@@ -18,12 +19,13 @@ export default function OrderPage() {
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
-        name,
-        mobile,
-        address,
-        product,
-        quantity
-      })
+  name,
+  mobile,
+  address,
+  product,
+  quantity,
+  payment
+})
     })
 
     const data = await res.json()
@@ -86,6 +88,16 @@ export default function OrderPage() {
         style={{display:"block",marginTop:10,padding:10,width:"100%"}}
       />
 
+      <select
+  value={payment}
+  onChange={(e)=>setPayment(e.target.value)}
+  style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+>
+  <option>Cash on Delivery</option>
+  <option>UPI Payment</option>
+  <option>Online Payment</option>
+</select>
+      
       <button
         onClick={submitOrder}
         style={{
