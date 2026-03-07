@@ -1,91 +1,102 @@
 "use client";
 
-export default function SubscribePage(){
+import { useEffect, useState } from "react";
 
-const startPayment = async ()=>{
+export default function SubscribePage() {
+  const [mobile, setMobile] = useState("");
 
-const res = await fetch("/api/create-payment",{
-method:"POST"
-});
+  useEffect(() => {
+    const savedMobile = localStorage.getItem("subscriptionMobile") || "";
+    setMobile(savedMobile);
 
-const order = await res.json();
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
-const options = {
+  const startPayment = async () => {
+    if (!mobile) {
+      alert("Customer mobile not found. Please order again.");
+      return;
+    }
 
-key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    const res = await fetch("/api/create-payment", {
+      method: "POST"
+    });
 
-amount: order.amount,
+    const order = await res.json();
 
-currency: "INR",
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Gau Trust Milk",
+      description: "Monthly Subscription",
+      order_id: order.id,
 
-name: "Gau Trust Milk",
+      handler: async function (response: any) {
+        const verifyRes = await fetch("/api/verify-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            mobile: mobile
+          })
+        });
 
-description: "Monthly Subscription",
+        const verifyData = await verifyRes.json();
 
-order_id: order.id,
+        if (verifyData.success) {
+          alert("Payment successful. Subscription activated.");
+          localStorage.removeItem("subscriptionMobile");
+          window.location.href = "/order";
+        } else {
+          alert(verifyData.message || "Payment verification failed");
+        }
+      },
 
-handler: function (response:any) {
+      prefill: {
+        name: "Customer",
+        contact: mobile
+      },
 
-alert("Payment Successful");
+      theme: {
+        color: "#2e7d32"
+      }
+    };
 
-window.location.href="/order";
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  };
 
-},
+  return (
+    <div style={{ padding: 40, fontFamily: "Arial", textAlign: "center" }}>
+      <h1>Subscription Required</h1>
 
-prefill: {
+      <p>Your free trial has expired.</p>
 
-name:"Customer",
+      <h2>₹199 / Month</h2>
 
-contact:""
-
-},
-
-theme:{
-color:"#2e7d32"
-}
-
-};
-
-const rzp = new (window as any).Razorpay(options);
-
-rzp.open();
-
-};
-
-return(
-
-<div style={{padding:40,fontFamily:"Arial",textAlign:"center"}}>
-
-<h1>Subscription Required</h1>
-
-<p>Your free trial has expired.</p>
-
-<h2>₹199 / Month</h2>
-
-<button
-
-onClick={startPayment}
-
-style={{
-padding:15,
-background:"green",
-color:"white",
-border:"none",
-fontSize:18,
-marginTop:20,
-borderRadius:8
-}}
-
->
-
-Subscribe Now
-
-</button>
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-</div>
-
-);
-
+      <button
+        onClick={startPayment}
+        style={{
+          padding: 15,
+          background: "green",
+          color: "white",
+          border: "none",
+          fontSize: 18,
+          marginTop: 20,
+          borderRadius: 8,
+          cursor: "pointer"
+        }}
+      >
+        Subscribe Now
+      </button>
+    </div>
+  );
 }
