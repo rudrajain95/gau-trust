@@ -1,24 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function OrderPage() {
+export default function OrderPage(){
 
-  const [name,setName] = useState("")
-  const [mobile,setMobile] = useState("")
-  const [address,setAddress] = useState("")
-  const [product,setProduct] = useState("Milk")
-  const [quantity,setQuantity] = useState("")
-  const [payment,setPayment] = useState("Cash on Delivery")
+  const [products,setProducts]=useState<any[]>([]);
+  const [product,setProduct]=useState("");
+  const [quantity,setQuantity]=useState("");
+  const [name,setName]=useState("");
+  const [mobile,setMobile]=useState("");
+  const [address,setAddress]=useState("");
 
-  const submitOrder = async () => {
+  useEffect(()=>{
 
-    if(payment !== "Cash on Delivery"){
-      alert("Online payment system coming soon. Please select Cash on Delivery.");
-      return;
+    const loadProducts=async()=>{
+
+      const res=await fetch("/api/products");
+      const data=await res.json();
+
+      setProducts(data);
+
+      if(data.length>0){
+        setProduct(data[0].name);
+      }
+
     }
 
-    const res = await fetch("/api/order",{
+    loadProducts();
+
+  },[]);
+
+  const submitOrder=async()=>{
+
+    const res=await fetch("/api/order",{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
@@ -29,100 +43,79 @@ export default function OrderPage() {
         address,
         product,
         quantity,
-        payment
+        payment:"cod"
       })
-    })
+    });
 
-    const data = await res.json()
+    const data=await res.json();
 
     if(data.success){
-      alert("🎉 Order placed! You have 7 days FREE delivery trial.")
-      setName("")
-      setMobile("")
-      setAddress("")
-      setQuantity("")
-      setPayment("Cash on Delivery")
+      alert("Order placed successfully");
+      setQuantity("");
+    }else if(data.subscriptionRequired){
+      alert("Trial expired. Please subscribe.");
+      localStorage.setItem("subscriptionMobile",mobile);
+      window.location.href="/subscribe";
     }else{
-      if(data.message){
-  alert(data.message)
- localStorage.setItem("subscriptionMobile", mobile)
-  window.location.href="/subscribe"
-}else{
-  alert("Order failed")
-}
+      alert("Order failed");
     }
 
   }
 
   return(
 
-    <div style={{padding:30,fontFamily:"Arial",maxWidth:500}}>
+    <div style={{padding:30,fontFamily:"Arial"}}>
 
-      <h1>Customer Order</h1>
-
-      <p style={{color:"green"}}>
-        🎉 New customers get 7 days FREE delivery trial
-      </p>
+      <h1>Order Milk</h1>
 
       <input
         placeholder="Name"
         value={name}
         onChange={(e)=>setName(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       />
 
       <input
         placeholder="Mobile"
         value={mobile}
         onChange={(e)=>setMobile(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       />
 
       <input
         placeholder="Address"
         value={address}
         onChange={(e)=>setAddress(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       />
 
       <select
         value={product}
         onChange={(e)=>setProduct(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       >
-        <option>Milk</option>
-        <option>Paneer</option>
-        <option>Curd</option>
-        <option>Butter</option>
-        <option>Ghee</option>
+        {products.map((p)=>(
+          <option key={p.id}>
+            {p.name} - ₹{p.price}/{p.unit}
+          </option>
+        ))}
       </select>
 
       <input
-        placeholder="Quantity (example: 2L / 500g)"
+        placeholder="Quantity"
         value={quantity}
         onChange={(e)=>setQuantity(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+        style={{display:"block",marginTop:10,padding:10,width:300}}
       />
-
-      <select
-        value={payment}
-        onChange={(e)=>setPayment(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      >
-        <option>Cash on Delivery</option>
-        <option>UPI Payment</option>
-        <option>Online Payment</option>
-      </select>
 
       <button
         onClick={submitOrder}
         style={{
-          marginTop:15,
+          marginTop:20,
           padding:12,
           background:"green",
           color:"white",
-          border:"none",
-          width:"100%"
+          border:"none"
         }}
       >
         Place Order
@@ -131,4 +124,5 @@ export default function OrderPage() {
     </div>
 
   )
+
 }
