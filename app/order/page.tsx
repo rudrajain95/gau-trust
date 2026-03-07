@@ -13,51 +13,51 @@ export default function OrderPage() {
 
   const submitOrder = async () => {
 
-  if(payment !== "Cash on Delivery"){
-    alert("Online payment system coming soon. Please select Cash on Delivery.");
-    return;
-  }
+    if(payment !== "Cash on Delivery"){
+      alert("Online payment system coming soon. Please select Cash on Delivery.");
+      return;
+    }
 
-  const res = await fetch("/api/order",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-      name,
-      mobile,
-      address,
-      product,
-      quantity,
-      payment
+    const res = await fetch("/api/order",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        name,
+        mobile,
+        address,
+        product,
+        quantity,
+        payment
+      })
     })
-  })
 
-  const data = await res.json()
+    const data = await res.json()
 
-  if(data.success){
-  alert("Order placed successfully")
-  setName("")
-  setMobile("")
-  setAddress("")
-  setQuantity("")
-  setPayment("Cash on Delivery")
-  }else{
-    alert(data.message || "Order failed")
- 
+    if(data.success){
+      alert("🎉 Order placed! You have 7 days FREE delivery trial.")
+      setName("")
+      setMobile("")
+      setAddress("")
+      setQuantity("")
+      setPayment("Cash on Delivery")
+    }else{
+      alert(data.message || "Order failed")
+    }
+
   }
 
-}
   return(
 
     <div style={{padding:30,fontFamily:"Arial",maxWidth:500}}>
 
       <h1>Customer Order</h1>
 
-      <p style={{color:"green",marginTop:10}}>
-🎉 New customers get 7 days FREE delivery trial
-</p>
-      
+      <p style={{color:"green"}}>
+        🎉 New customers get 7 days FREE delivery trial
+      </p>
+
       <input
         placeholder="Name"
         value={name}
@@ -99,15 +99,15 @@ export default function OrderPage() {
       />
 
       <select
-  value={payment}
-  onChange={(e)=>setPayment(e.target.value)}
-  style={{display:"block",marginTop:10,padding:10,width:"100%"}}
->
-  <option>Cash on Delivery</option>
-  <option>UPI Payment</option>
-  <option>Online Payment</option>
-</select>
-      
+        value={payment}
+        onChange={(e)=>setPayment(e.target.value)}
+        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
+      >
+        <option>Cash on Delivery</option>
+        <option>UPI Payment</option>
+        <option>Online Payment</option>
+      </select>
+
       <button
         onClick={submitOrder}
         style={{
