@@ -5,7 +5,10 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   const products = await prisma.product.findMany({
-    where: { active: true }
+    where: { active: true },
+    orderBy: {
+      createdAt: "asc"
+    }
   });
 
   return NextResponse.json(products);
