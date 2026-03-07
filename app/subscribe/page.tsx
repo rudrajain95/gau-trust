@@ -1,113 +1,91 @@
 "use client";
 
-import { useEffect, useState } from "react";
+export default function SubscribePage(){
 
-export default function SubscribePage() {
-  const [mobile, setMobile] = useState("");
+const startPayment = async ()=>{
 
-  useEffect(() => {
-    const savedMobile = localStorage.getItem("subscriptionMobile") || "";
-    setMobile(savedMobile);
+const res = await fetch("/api/create-payment",{
+method:"POST"
+});
 
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
+const order = await res.json();
 
-  const payNow = async () => {
-    if (!mobile) {
-      alert("Customer mobile not found. Please order again.");
-      return;
-    }
+const options = {
 
-    const res = await fetch("/api/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: "subscription",
-        mobile: mobile,
-        address: "subscription",
-        product: "subscription",
-        quantity: "1",
-        payment: "online"
-      })
-    });
+key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
 
-    const data = await res.json();
+amount: order.amount,
 
-    if (!data.orderId) {
-      alert("Unable to start payment");
-      return;
-    }
+currency: "INR",
 
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      amount: data.amount,
-      currency: "INR",
-      name: "Gau Trust",
-      description: "Monthly Milk Subscription",
-      order_id: data.orderId,
-      handler: async function (response: any) {
-        const verifyRes = await fetch("/api/verify-payment", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            mobile: mobile
-          })
-        });
+name: "Gau Trust Milk",
 
-        const verifyData = await verifyRes.json();
+description: "Monthly Subscription",
 
-        if (verifyData.success) {
-          alert("Payment successful. Subscription activated.");
-          localStorage.removeItem("subscriptionMobile");
-          window.location.href = "/";
-        } else {
-          alert(verifyData.message || "Payment verification failed");
-        }
-      },
-      theme: {
-        color: "#2e7d32"
-      }
-    };
+order_id: order.id,
 
-    const rzp = new (window as any).Razorpay(options);
-    rzp.open();
-  };
+handler: function (response:any) {
 
-  return (
-    <div style={{ padding: 40, fontFamily: "Arial", textAlign: "center" }}>
-      <h1>Subscription Required</h1>
+alert("Payment Successful");
 
-      <p>Your 7 day free trial has expired.</p>
+window.location.href="/order";
 
-      <h2>Subscribe ₹199 / month</h2>
+},
 
-      <p>Enjoy free milk delivery and premium service.</p>
+prefill: {
 
-      <button
-        onClick={payNow}
-        style={{
-          marginTop: 20,
-          padding: 15,
-          background: "green",
-          color: "white",
-          border: "none",
-          fontSize: 16,
-          borderRadius: 8,
-          cursor: "pointer"
-        }}
-      >
-        Subscribe Now
-      </button>
-    </div>
-  );
+name:"Customer",
+
+contact:""
+
+},
+
+theme:{
+color:"#2e7d32"
+}
+
+};
+
+const rzp = new (window as any).Razorpay(options);
+
+rzp.open();
+
+};
+
+return(
+
+<div style={{padding:40,fontFamily:"Arial",textAlign:"center"}}>
+
+<h1>Subscription Required</h1>
+
+<p>Your free trial has expired.</p>
+
+<h2>₹199 / Month</h2>
+
+<button
+
+onClick={startPayment}
+
+style={{
+padding:15,
+background:"green",
+color:"white",
+border:"none",
+fontSize:18,
+marginTop:20,
+borderRadius:8
+}}
+
+>
+
+Subscribe Now
+
+</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</div>
+
+);
+
 }
