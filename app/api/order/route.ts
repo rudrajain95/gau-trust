@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import Razorpay from "razorpay";
 
 const prisma = new PrismaClient();
 
@@ -8,12 +9,11 @@ export async function POST(req: Request) {
 
   const { name, mobile, address, product, quantity, payment } = body;
 
-  // check customer
   let customer = await prisma.customer.findUnique({
     where: { mobile }
   });
 
-  // if first order create trial
+  // FIRST ORDER → CREATE TRIAL
   if (!customer) {
 
     const today = new Date();
@@ -33,19 +33,32 @@ export async function POST(req: Request) {
 
   }
 
-  // trial expiry check
   const now = new Date();
 
+  // TRIAL EXPIRED → NEED SUBSCRIPTION
   if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
+
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
+
+    const order = await razorpay.orders.create({
+      amount: 19900,
+      currency: "INR",
+      receipt: "gau-trust-subscription"
+    });
 
     return Response.json({
       success:false,
-      message:"Trial expired. Please subscribe ₹199/month."
+      subscriptionRequired:true,
+      orderId:order.id,
+      amount:order.amount
     });
 
   }
 
-  // create order
+  // CREATE MILK ORDER
   await prisma.order.create({
     data:{
       name,
