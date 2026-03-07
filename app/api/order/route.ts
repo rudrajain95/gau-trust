@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import Razorpay from "razorpay";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
@@ -9,15 +9,15 @@ export async function POST(req: Request) {
 
   const { name, mobile, address, product, quantity, payment } = body;
 
+  // check customer
   let customer = await prisma.customer.findUnique({
     where: { mobile }
   });
 
-  // FIRST ORDER → CREATE TRIAL
+  // create trial user
   if (!customer) {
 
     const today = new Date();
-
     const trialEnd = new Date();
     trialEnd.setDate(today.getDate() + 7);
 
@@ -33,55 +33,19 @@ export async function POST(req: Request) {
 
   }
 
+  // trial check
   const now = new Date();
 
-  // TRIAL EXPIRED → NEED SUBSCRIPTION
   if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
 
-    const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    });
-
-    const order = await razorpay.orders.create({
-      amount: 19900,
-      currency: "INR",
-      receipt: "gau-trust-subscription"
-    });
-
-    return Response.json({
+    return NextResponse.json({
       success:false,
-      subscriptionRequired:true,
-      orderId:order.id,
-      amount:order.amount
+      message:"Trial expired. Please subscribe ₹199/month."
     });
 
   }
 
-  // SUBSCRIPTION EXPIRED CHECK
-  const today = new Date();
-
-  if (
-    customer.subscription &&
-    customer.subscriptionEnd &&
-    today > customer.subscriptionEnd
-  ) {
-
-    await prisma.customer.update({
-      where: { mobile },
-      data: {
-        subscription: false
-      }
-    });
-
-    return Response.json({
-      success:false,
-      message:"Subscription expired. Please subscribe again."
-    });
-
-  }
-
-  // CREATE MILK ORDER
+  // create order
   await prisma.order.create({
     data:{
       name,
@@ -93,22 +57,33 @@ export async function POST(req: Request) {
     }
   });
 
- const message = `
-New Order - Gau Trust Milk
+  // SEND WHATSAPP MESSAGE
+
+  const message =
+`🚨 New Order
 
 Name: ${name}
 Mobile: ${mobile}
-Address: ${address}
 Product: ${product}
-Quantity: ${quantity}
-Payment: ${payment}
-`;
+Qty: ${quantity}
+Address: ${address}
+Payment: ${payment}`;
 
-const whatsappUrl =
-`https://wa.me/917974940093?text=${encodeURIComponent(message)}`;
 
-return Response.json({
-  success: true,
-  whatsappUrl
-});
+  await fetch("https://api.ultramsg.com/instance164454/messages/chat", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      token:"la7wlczxltgt3wtx",
+      to:"917974940093",
+      body:message
+    })
+  });
+
+  return NextResponse.json({
+    success:true
+  });
+
 }
