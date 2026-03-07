@@ -8,23 +8,12 @@ export async function POST(req: Request) {
 
   const { name, mobile, address, product, quantity, payment } = body;
 
-  // trial check
-
-const now = new Date();
-
-if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
-
-  return Response.json({
-    success:false,
-    message:"Trial expired. Please subscribe ₹199/month."
-  });
-
-  // check customer exists
+  // check customer
   let customer = await prisma.customer.findUnique({
     where: { mobile }
   });
 
-  // if first order → create trial customer
+  // if first order create trial
   if (!customer) {
 
     const today = new Date();
@@ -33,7 +22,7 @@ if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
     trialEnd.setDate(today.getDate() + 7);
 
     customer = await prisma.customer.create({
-      data: {
+      data:{
         name,
         mobile,
         address,
@@ -44,9 +33,21 @@ if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
 
   }
 
+  // trial expiry check
+  const now = new Date();
+
+  if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
+
+    return Response.json({
+      success:false,
+      message:"Trial expired. Please subscribe ₹199/month."
+    });
+
+  }
+
   // create order
   await prisma.order.create({
-    data: {
+    data:{
       name,
       mobile,
       address,
@@ -57,7 +58,7 @@ if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
   });
 
   return Response.json({
-    success: true
+    success:true
   });
 
 }
