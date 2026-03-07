@@ -43,7 +43,7 @@ export default function OrderPage() {
   setQuantity("")
   setPayment("Cash on Delivery")
   }else{
-    alert("Order failed")
+    alert(data.message || "Order failed")
   }
 
 }
