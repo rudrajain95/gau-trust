@@ -93,8 +93,22 @@ export async function POST(req: Request) {
     }
   });
 
-  return Response.json({
-    success:true
-  });
+ const message = `
+New Order - Gau Trust Milk
 
+Name: ${name}
+Mobile: ${mobile}
+Address: ${address}
+Product: ${product}
+Quantity: ${quantity}
+Payment: ${payment}
+`;
+
+const whatsappUrl =
+`https://wa.me/917974940093?text=${encodeURIComponent(message)}`;
+
+return Response.json({
+  success: true,
+  whatsappUrl
+});
 }
