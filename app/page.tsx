@@ -57,6 +57,22 @@ export default function HomePage() {
             Admin Login
           </button>
         </a>
+        
+        <a href="/admin/dashboard">
+<button
+style={{
+padding:"14px 22px",
+background:"black",
+color:"white",
+border:"none",
+fontSize:18,
+borderRadius:8
+}}
+>
+Admin Panel
+</button>
+</a>
+        
       </div>
     </div>
   );
