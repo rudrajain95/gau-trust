@@ -58,6 +58,29 @@ export async function POST(req: Request) {
 
   }
 
+  // SUBSCRIPTION EXPIRED CHECK
+  const today = new Date();
+
+  if (
+    customer.subscription &&
+    customer.subscriptionEnd &&
+    today > customer.subscriptionEnd
+  ) {
+
+    await prisma.customer.update({
+      where: { mobile },
+      data: {
+        subscription: false
+      }
+    });
+
+    return Response.json({
+      success:false,
+      message:"Subscription expired. Please subscribe again."
+    });
+
+  }
+
   // CREATE MILK ORDER
   await prisma.order.create({
     data:{
