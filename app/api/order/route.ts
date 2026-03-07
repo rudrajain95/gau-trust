@@ -19,8 +19,6 @@ if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
     message:"Trial expired. Please subscribe ₹199/month."
   });
 
-}
-
   // check customer exists
   let customer = await prisma.customer.findUnique({
     where: { mobile }
