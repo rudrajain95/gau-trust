@@ -8,6 +8,19 @@ export async function POST(req: Request) {
 
   const { name, mobile, address, product, quantity, payment } = body;
 
+  // trial check
+
+const now = new Date();
+
+if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
+
+  return Response.json({
+    success:false,
+    message:"Trial expired. Please subscribe ₹199/month."
+  });
+
+}
+
   // check customer exists
   let customer = await prisma.customer.findUnique({
     where: { mobile }
