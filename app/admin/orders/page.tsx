@@ -1,128 +1,151 @@
-"use client";
+export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
-export default function OrderPage() {
+const prisma = new PrismaClient();
 
-  const [name,setName] = useState("")
-  const [mobile,setMobile] = useState("")
-  const [address,setAddress] = useState("")
-  const [product,setProduct] = useState("Milk")
-  const [quantity,setQuantity] = useState("")
-  const [payment,setPayment] = useState("Cash on Delivery")
+export default async function OrdersPage() {
 
-  const submitOrder = async () => {
+  const orders = await prisma.order.findMany({
+    orderBy: { createdAt: "desc" }
+  });
 
-    if(payment !== "Cash on Delivery"){
-      alert("Online payment system coming soon. Please select Cash on Delivery.");
-      return;
-    }
+  async function updateStatus(id: string, status: string) {
+    "use server";
 
-    const res = await fetch("/api/order",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        name,
-        mobile,
-        address,
-        product,
-        quantity,
-        payment
-      })
-    })
+    await prisma.order.update({
+      where: { id },
+      data: { status }
+    });
 
-    const data = await res.json()
-
-    if(data.success){
-      alert("🎉 Order placed! You have 7 days FREE delivery trial.")
-      setName("")
-      setMobile("")
-      setAddress("")
-      setQuantity("")
-      setPayment("Cash on Delivery")
-    }else{
-      alert(data.message || "Order failed")
-    }
-
+    revalidatePath("/admin/orders");
   }
 
-  return(
+  return (
+    <div style={{ padding: 20, fontFamily: "Arial" }}>
+      <h1>Customer Orders</h1>
 
-    <div style={{padding:30,fontFamily:"Arial",maxWidth:500}}>
+      <table style={{
+        width: "100%",
+        borderCollapse: "collapse",
+        marginTop: 20
+      }}>
 
-      <h1>Customer Order</h1>
+        <thead>
+          <tr>
+            <th style={th}>Time</th>
+            <th style={th}>Name</th>
+            <th style={th}>Mobile</th>
+            <th style={th}>Product</th>
+            <th style={th}>Qty</th>
+            <th style={th}>Payment</th>
+            <th style={th}>Address</th>
+            <th style={th}>Status</th>
+            <th style={th}>Trial</th>
+            <th style={th}>Action</th>
+          </tr>
+        </thead>
 
-      <p style={{color:"green"}}>
-        🎉 New customers get 7 days FREE delivery trial
-      </p>
+        <tbody>
 
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={(e)=>setName(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      />
+          {orders.map((o: any) => (
 
-      <input
-        placeholder="Mobile"
-        value={mobile}
-        onChange={(e)=>setMobile(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      />
+            <tr key={o.id}>
 
-      <input
-        placeholder="Address"
-        value={address}
-        onChange={(e)=>setAddress(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      />
+              <td style={td}>
+                {new Date(o.createdAt).toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}
+              </td>
 
-      <select
-        value={product}
-        onChange={(e)=>setProduct(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      >
-        <option>Milk</option>
-        <option>Paneer</option>
-        <option>Curd</option>
-        <option>Butter</option>
-        <option>Ghee</option>
-      </select>
+              <td style={td}>{o.name}</td>
 
-      <input
-        placeholder="Quantity (example: 2L / 500g)"
-        value={quantity}
-        onChange={(e)=>setQuantity(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      />
+              <td style={td}>
+                <a href={`tel:${o.mobile}`}>
+                  {o.mobile}
+                </a>
+              </td>
 
-      <select
-        value={payment}
-        onChange={(e)=>setPayment(e.target.value)}
-        style={{display:"block",marginTop:10,padding:10,width:"100%"}}
-      >
-        <option>Cash on Delivery</option>
-        <option>UPI Payment</option>
-        <option>Online Payment</option>
-      </select>
+              <td style={td}>{o.product}</td>
 
-      <button
-        onClick={submitOrder}
-        style={{
-          marginTop:15,
-          padding:12,
-          background:"green",
-          color:"white",
-          border:"none",
-          width:"100%"
-        }}
-      >
-        Place Order
-      </button>
+              <td style={td}>{o.quantity}</td>
+
+              <td style={td}>{o.payment}</td>
+
+              <td style={td}>{o.address}</td>
+
+              <td style={td}>{o.status}</td>
+
+              <td style={td}>
+                Trial User
+              </td>
+
+              <td style={td}>
+
+                <a href={`tel:${o.mobile}`}>
+                  <button style={callBtn}>Call</button>
+                </a>
+
+                <form action={updateStatus.bind(null, o.id, "Confirmed")} style={{display:"inline",marginLeft:5}}>
+                  <button style={confirmBtn}>Confirm</button>
+                </form>
+
+                <form action={updateStatus.bind(null, o.id, "Delivered")} style={{display:"inline",marginLeft:5}}>
+                  <button style={deliverBtn}>Delivered</button>
+                </form>
+
+                <form action={updateStatus.bind(null, o.id, "Cancelled")} style={{display:"inline",marginLeft:5}}>
+                  <button style={cancelBtn}>Cancel</button>
+                </form>
+
+              </td>
+
+            </tr>
+
+          ))}
+
+        </tbody>
+
+      </table>
 
     </div>
-
-  )
+  );
 }
+
+const th = {
+  border:"1px solid #ddd",
+  padding:8,
+  background:"#f5f5f5"
+};
+
+const td = {
+  border:"1px solid #ddd",
+  padding:8
+};
+
+const callBtn = {
+  padding:"6px 10px",
+  background:"green",
+  color:"white",
+  border:"none"
+};
+
+const confirmBtn = {
+  padding:"6px 10px",
+  background:"blue",
+  color:"white",
+  border:"none"
+};
+
+const deliverBtn = {
+  padding:"6px 10px",
+  background:"green",
+  color:"white",
+  border:"none"
+};
+
+const cancelBtn = {
+  padding:"6px 10px",
+  background:"red",
+  color:"white",
+  border:"none"
+};
