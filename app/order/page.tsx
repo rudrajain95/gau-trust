@@ -54,6 +54,10 @@ export default function OrderPage() {
 
       <h1>Customer Order</h1>
 
+      <p style={{color:"green",marginTop:10}}>
+🎉 New customers get 7 days FREE delivery trial
+</p>
+      
       <input
         placeholder="Name"
         value={name}
