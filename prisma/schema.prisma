@@ -37,12 +37,14 @@ model Product {
   createdAt DateTime @default(now())
 }
 model Customer {
-  id          String   @id @default(cuid())
-  name        String
-  mobile      String   @unique
-  address     String
-  trialStart  DateTime?
-  trialEnd    DateTime?
-  subscription Boolean @default(false)
-  createdAt   DateTime @default(now())
+  id                String    @id @default(cuid())
+  name              String
+  mobile            String    @unique
+  address           String
+  trialStart        DateTime?
+  trialEnd          DateTime?
+  subscription      Boolean   @default(false)
+  subscriptionStart DateTime?
+  subscriptionEnd   DateTime?
+  createdAt         DateTime  @default(now())
 }
