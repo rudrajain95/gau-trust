@@ -73,6 +73,18 @@ export default function Dashboard() {
         >
           Logout
         </button>
+
+        <a href="/admin/products">
+<button style={{
+background:"purple",
+color:"white",
+padding:"10px 16px",
+border:"none",
+marginRight:10
+}}>
+Products
+</button>
+</a>
       </div>
     </div>
   );
