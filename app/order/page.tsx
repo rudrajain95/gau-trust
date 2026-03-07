@@ -96,8 +96,13 @@ export default function OrderPage() {
     const data=await res.json();
 
     if(data.success){
-      alert("Order placed successfully");
-      setQuantity("");
+
+  alert("Order placed successfully");
+
+  if(data.whatsappUrl){
+    window.open(data.whatsappUrl,"_blank");
+  }
+     setQuantity("");
     }else{
       alert("Order failed");
     }
