@@ -45,6 +45,7 @@ export default function OrderPage() {
     }else{
       if(data.message){
   alert(data.message)
+ localStorage.setItem("subscriptionMobile", mobile)
   window.location.href="/subscribe"
 }else{
   alert("Order failed")
