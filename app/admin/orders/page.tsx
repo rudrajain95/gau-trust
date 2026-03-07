@@ -76,7 +76,9 @@ export default async function OrdersPage() {
               <td style={td}>{o.status}</td>
 
               <td style={td}>
-                Trial User
+           {o.trialEnd ? `Days Left: ${
+Math.ceil((new Date(o.trialEnd).getTime() - new Date().getTime()) / (1000*60*60*24))
+}` : "Trial User"}
               </td>
 
               <td style={td}>
