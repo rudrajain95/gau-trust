@@ -9,12 +9,12 @@ export async function POST(req: Request) {
 
   const { name, mobile, address, product, quantity, payment } = body;
 
-  // check customer
+  // CHECK CUSTOMER
   let customer = await prisma.customer.findUnique({
     where: { mobile }
   });
 
-  // create trial user
+  // CREATE TRIAL USER
   if (!customer) {
 
     const today = new Date();
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
   }
 
-  // trial check
+  // TRIAL CHECK
   const now = new Date();
 
   if (customer.trialEnd && now > customer.trialEnd && !customer.subscription) {
@@ -45,7 +45,14 @@ export async function POST(req: Request) {
 
   }
 
-  // create order
+  // DELIVERY CHARGE LOGIC
+  let deliveryCharge = 0;
+
+  if(product !== "Milk"){
+    deliveryCharge = 20;
+  }
+
+  // CREATE ORDER
   await prisma.order.create({
     data:{
       name,
@@ -53,23 +60,25 @@ export async function POST(req: Request) {
       address,
       product,
       quantity,
-      payment
+      payment,
+      deliveryCharge
     }
   });
 
-  // SEND WHATSAPP MESSAGE
-
+  // WHATSAPP MESSAGE TEXT
   const message =
-`🚨 New Order
+`🚨 New Order - Gau Trust Milk
 
 Name: ${name}
 Mobile: ${mobile}
 Product: ${product}
-Qty: ${quantity}
+Quantity: ${quantity}
+Delivery Charge: ₹${deliveryCharge}
 Address: ${address}
-Payment: ${payment}`;
+Payment: ${payment}
+`;
 
-
+  // SEND WHATSAPP ALERT
   await fetch("https://api.ultramsg.com/instance164454/messages/chat", {
     method:"POST",
     headers:{
