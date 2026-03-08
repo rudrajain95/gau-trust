@@ -1,65 +1,135 @@
 "use client";
 
-export default function HomePage() {
+export default function HomePage(){
 
-return (
+return(
 
-<div style={{fontFamily:"Arial"}}>
+<div style={{fontFamily:"Arial",background:"#e8f4ff"}}>
 
-{/* HERO */}
+{/* HEADER */}
 
 <div style={{
-background:"#1b5e20",
-color:"white",
-padding:"80px 20px",
-textAlign:"center"
+display:"flex",
+justifyContent:"space-between",
+alignItems:"center",
+padding:"15px 30px",
+background:"white",
+boxShadow:"0 2px 5px rgba(0,0,0,0.1)"
 }}>
 
-<h1 style={{fontSize:44}}>Gau Trust Milk</h1>
+<h2 style={{margin:0}}>Gau Trust Milk</h2>
 
-<p style={{fontSize:20,marginTop:10}}>
-Fresh Milk & Dairy Products Delivered To Your Home
-</p>
+<div>
 
-<a href="/order">
+<a href="/dashboard">
 
 <button style={{
-marginTop:30,
-padding:"14px 30px",
-fontSize:18,
-background:"#ffc107",
-color:"black",
-border:"none",
-borderRadius:8,
+marginRight:10,
+padding:"8px 16px",
+border:"1px solid #333",
+background:"white",
 cursor:"pointer"
 }}>
+Customer Login
+</button>
 
-Customer Order
+</a>
 
+<a href="/admin/login">
+
+<button style={{
+padding:"8px 16px",
+background:"#333",
+color:"white",
+border:"none",
+cursor:"pointer"
+}}>
+Admin Login
 </button>
 
 </a>
 
 </div>
 
-{/* ABOUT */}
+</div>
 
-<div style={{padding:40,textAlign:"center"}}>
+{/* HERO */}
 
-<h2>About Gau Trust Milk</h2>
+<div style={{
+textAlign:"center",
+padding:"70px 20px"
+}}>
 
-<p style={{maxWidth:700,margin:"20px auto",fontSize:18}}>
+<h1 style={{fontSize:40}}>Fresh Milk Delivered Daily</h1>
 
-Gau Trust Milk provides fresh and pure milk directly sourced from trusted dairy farms and gau shalas.
-Our mission is to deliver healthy dairy products to every household with reliable daily delivery.
-
+<p style={{fontSize:18,maxWidth:600,margin:"10px auto"}}>
+Pure and fresh dairy products delivered directly to your home.
 </p>
+
+<a href="/order">
+
+<button style={{
+marginTop:25,
+padding:"14px 30px",
+fontSize:18,
+background:"#2196f3",
+color:"white",
+border:"none",
+borderRadius:8
+}}>
+Order Milk
+</button>
+
+</a>
+
+</div>
+
+{/* BROADCAST */}
+
+<div style={{
+background:"#fff",
+padding:30,
+textAlign:"center"
+}}>
+
+<h2>Important Update</h2>
+
+<p>
+Subscription customers get same day delivery.
+</p>
+
+<p>
+Non-subscription customers will receive delivery next day.
+</p>
+
+</div>
+
+{/* DELIVERY RULES */}
+
+<div style={{
+padding:40,
+textAlign:"center"
+}}>
+
+<h2>Delivery Rules</h2>
+
+<p><b>Order Time:</b> 6 AM – 8 PM</p>
+
+<p><b>Delivery Time:</b> 6 AM – 11 AM</p>
+
+<p><b>Subscription Customers:</b> Same Day Delivery</p>
+
+<p><b>Normal Customers:</b> Next Day Delivery</p>
 
 </div>
 
 {/* PRODUCTS */}
 
-<div style={{background:"#f5f5f5",padding:40,textAlign:"center"}}>
+<div style={{
+background:"white",
+padding:40,
+textAlign:"center"
+}}>
 
 <h2>Our Products</h2>
 
@@ -71,78 +141,31 @@ flexWrap:"wrap",
 marginTop:30
 }}>
 
-<Product name="Milk" price="₹60 / Litre"/>
-<Product name="Paneer" price="Fresh Paneer"/>
-<Product name="Curd" price="Homemade Curd"/>
-<Product name="Butter" price="Fresh Butter"/>
-<Product name="Ghee" price="Desi Ghee"/>
+<Product name="Milk"/>
+<Product name="Paneer"/>
+<Product name="Curd"/>
+<Product name="Butter"/>
+<Product name="Ghee"/>
 
 </div>
 
 </div>
 
-{/* DELIVERY RULES */}
-
-<div style={{padding:40,textAlign:"center"}}>
-
-<h2>Delivery Information</h2>
-
-<p style={{fontSize:18,marginTop:20}}>
-
-Subscription Customers  
-</p>
-
-<p>
-Same Day Delivery Available  
-<br/>
-Order Time: 6 AM – 8 PM
-</p>
-
-<br/>
-
-<p style={{fontSize:18}}>
-
-Non-Subscription Customers
-</p>
-
-<p>
-Order Today → Delivery Next Day  
-<br/>
-Order Time: 6 AM – 11 AM
-</p>
-
-</div>
-
-{/* SUBSCRIPTION */}
+{/* ABOUT */}
 
 <div style={{
-background:"#1b5e20",
-color:"white",
 padding:40,
 textAlign:"center"
 }}>
 
-<h2>Monthly Subscription</h2>
+<h2>About Gau Trust Milk</h2>
 
-<p style={{fontSize:18,marginTop:10}}>
+<p style={{maxWidth:700,margin:"20px auto"}}>
 
-₹199 / Month
-
-</p>
-
-<p>
-
-Benefits:
-
-</p>
-
-<p>
-
-• Free Delivery  
-<br/>
-• Same Day Delivery  
-<br/>
-• Priority Milk Supply  
+Gau Trust Milk provides fresh milk and dairy products sourced
+directly from trusted dairy farms and gaushalas.
+Our goal is to deliver pure milk to every household with reliable
+delivery service.
 
 </p>
 
@@ -151,7 +174,7 @@ Benefits:
 {/* FOOTER */}
 
 <div style={{
-background:"#263238",
+background:"#333",
 color:"white",
 padding:20,
 textAlign:"center"
@@ -167,7 +190,7 @@ textAlign:"center"
 
 }
 
-function Product({name,price}:{name:string,price:string}){
+function Product({name}:{name:string}){
 
 return(
 
@@ -175,13 +198,10 @@ return(
 border:"1px solid #ddd",
 padding:20,
 width:180,
-borderRadius:10,
-background:"white"
+borderRadius:8
 }}>
 
 <h3>{name}</h3>
-
-<p>{price}</p>
 
 </div>
 
