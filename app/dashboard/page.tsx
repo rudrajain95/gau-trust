@@ -4,12 +4,8 @@ import { useState, useEffect } from "react";
 
 export default function Dashboard(){
 
-  const savedMobile =
-typeof window !== "undefined"
-? localStorage.getItem("customerMobile")
-: "";
-
 const [mobile,setMobile] = useState("");
+const [data,setData] = useState<any>(null);
 
 useEffect(()=>{
 
@@ -20,9 +16,13 @@ setMobile(savedMobile);
 }
 
 },[])
-const [data,setData] = useState<any>(null);
 
 const loadDashboard = async ()=>{
+
+if(!mobile){
+alert("Enter mobile number");
+return;
+}
 
 const res = await fetch("/api/customer-info",{
 method:"POST",
@@ -86,14 +86,12 @@ View Dashboard
 <table border={1} cellPadding={10}>
 
 <thead>
-
 <tr>
 <th>Product</th>
 <th>Qty</th>
 <th>Status</th>
 <th>Date</th>
 </tr>
-
 </thead>
 
 <tbody>
