@@ -25,7 +25,7 @@ export default function HomePage() {
         </div>
 
         <div style={{ display: "flex", gap: 12 }}>
-          <a href="/login">
+         <a href="/login">
             <button style={btn}>Customer Login</button>
           </a>
 
