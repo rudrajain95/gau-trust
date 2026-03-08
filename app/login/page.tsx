@@ -2,11 +2,19 @@
 
 import { useState } from "react";
 
-export default function CustomerLogin(){
+export default function Login(){
 
-const [mobile,setMobile] = useState("");
+const [mobile,setMobile]=useState("");
 
-const login = ()=>{
+const login=()=>{
+
+if(!mobile){
+
+alert("Enter mobile number");
+
+return;
+
+}
 
 localStorage.setItem("customerMobile",mobile);
 
@@ -24,17 +32,13 @@ return(
 placeholder="Enter Mobile Number"
 value={mobile}
 onChange={(e)=>setMobile(e.target.value)}
-style={{
-display:"block",
-marginTop:20,
-padding:12,
-width:250
-}}
+style={{padding:12,width:300}}
 />
 
 <button
 onClick={login}
 style={{
+display:"block",
 marginTop:20,
 padding:12,
 background:"#2196f3",
