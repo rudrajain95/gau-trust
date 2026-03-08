@@ -30,7 +30,7 @@ border:"1px solid #333",
 background:"white",
 cursor:"pointer"
 }}>
-Customer Login
+<a href="/login">
 </button>
 
 </a>
