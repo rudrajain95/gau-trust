@@ -10,9 +10,20 @@ useEffect(()=>{
 
 const mobile = localStorage.getItem("customerMobile");
 
+const loadOrders=()=>{
+
 fetch(`/api/customer-orders?mobile=${mobile}`)
 .then(res=>res.json())
 .then(data=>setOrders(data))
+
+}
+
+loadOrders();
+
+// auto refresh every 5 seconds
+const interval=setInterval(loadOrders,5000);
+
+return ()=>clearInterval(interval);
 
 },[])
 
@@ -65,7 +76,7 @@ width:"100%"
 
 <td style={{border:"1px solid #ddd",padding:10}}>
 
-{o.status==="Pending" && "🟡 Pending"}
+{o.status==="Pending" && "🟡 Preparing"}
 
 {o.status==="Delivered" && "🟢 Delivered"}
 
