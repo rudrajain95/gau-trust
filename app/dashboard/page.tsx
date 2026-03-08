@@ -4,6 +4,12 @@ import { useState } from "react";
 
 export default function Dashboard(){
 
+  const savedMobile =
+typeof window !== "undefined"
+? localStorage.getItem("customerMobile")
+: "";
+
+const [mobile,setMobile] = useState(savedMobile || "");
 const [mobile,setMobile] = useState("");
 const [data,setData] = useState<any>(null);
 
