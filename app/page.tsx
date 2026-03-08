@@ -21,8 +21,7 @@ boxShadow:"0 2px 5px rgba(0,0,0,0.1)"
 
 <div>
 
-<a href="/dashboard">
-
+<a href="/login">
 <button style={{
 marginRight:10,
 padding:"8px 16px",
@@ -30,9 +29,8 @@ border:"1px solid #333",
 background:"white",
 cursor:"pointer"
 }}>
-<a href="/login">
+Customer Login
 </button>
-
 </a>
 
 <a href="/admin/login">
@@ -94,13 +92,9 @@ textAlign:"center"
 
 <h2>Important Update</h2>
 
-<p>
-Subscription customers get same day delivery.
-</p>
+<p>Subscription customers get same day delivery.</p>
 
-<p>
-Non-subscription customers will receive delivery next day.
-</p>
+<p>Non-subscription customers will receive delivery next day.</p>
 
 </div>
 
