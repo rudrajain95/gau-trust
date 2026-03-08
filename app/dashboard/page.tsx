@@ -72,6 +72,20 @@ View Dashboard
 
 <div style={{marginTop:30}}>
 
+  <a href="/orders">
+<button
+style={{
+padding:10,
+background:"#2196f3",
+color:"white",
+border:"none",
+marginBottom:20
+}}
+>
+My Orders Page
+</button>
+</a>
+  
 <h2>Customer Info</h2>
 
 <p>Name: {data.customer.name}</p>
