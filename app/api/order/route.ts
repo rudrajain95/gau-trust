@@ -65,6 +65,16 @@ export async function POST(req: Request) {
     }
   });
 
+  // ADD COINS TO CUSTOMER WALLET
+  await prisma.customer.update({
+    where:{ mobile },
+    data:{
+      coins:{
+        increment:5
+      }
+    }
+  });
+
   // WHATSAPP MESSAGE TEXT
   const message =
 `🚨 New Order - Gau Trust Milk
