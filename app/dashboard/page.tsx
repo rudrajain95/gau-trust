@@ -10,7 +10,6 @@ typeof window !== "undefined"
 : "";
 
 const [mobile,setMobile] = useState(savedMobile || "");
-const [mobile,setMobile] = useState("");
 const [data,setData] = useState<any>(null);
 
 const loadDashboard = async ()=>{
