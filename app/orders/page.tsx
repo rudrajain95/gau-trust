@@ -76,12 +76,15 @@ width:"100%"
 
 <td style={{border:"1px solid #ddd",padding:10}}>
 
-{o.status==="Pending" && "🟡 Preparing"}
+{o.status==="Pending" && "🟡 Order Received"}
+
+{o.status==="Preparing" && "🟠 Preparing"}
+
+{o.status==="Out for Delivery" && "🚚 Out for Delivery"}
 
 {o.status==="Delivered" && "🟢 Delivered"}
 
 {o.status==="Cancelled" && "🔴 Cancelled"}
-
 </td>
 
 <td style={{border:"1px solid #ddd",padding:10}}>
