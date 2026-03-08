@@ -76,9 +76,9 @@ export default async function OrdersPage() {
               <td style={td}>{o.status}</td>
 
               <td style={td}>
-           {o.trialEnd ? `Days Left: ${
-Math.ceil((new Date(o.trialEnd).getTime() - new Date().getTime()) / (1000*60*60*24))
-}` : "Trial User"}
+                {o.trialEnd ? `Days Left: ${
+                  Math.ceil((new Date(o.trialEnd).getTime() - new Date().getTime()) / (1000*60*60*24))
+                }` : "Trial User"}
               </td>
 
               <td style={td}>
@@ -87,8 +87,12 @@ Math.ceil((new Date(o.trialEnd).getTime() - new Date().getTime()) / (1000*60*60*
                   <button style={callBtn}>Call</button>
                 </a>
 
-                <form action={updateStatus.bind(null, o.id, "Confirmed")} style={{display:"inline",marginLeft:5}}>
-                  <button style={confirmBtn}>Confirm</button>
+                <form action={updateStatus.bind(null, o.id, "Preparing")} style={{display:"inline",marginLeft:5}}>
+                  <button style={preparingBtn}>Preparing</button>
+                </form>
+
+                <form action={updateStatus.bind(null, o.id, "Out for Delivery")} style={{display:"inline",marginLeft:5}}>
+                  <button style={outBtn}>Out</button>
                 </form>
 
                 <form action={updateStatus.bind(null, o.id, "Delivered")} style={{display:"inline",marginLeft:5}}>
@@ -126,28 +130,35 @@ const td = {
 
 const callBtn = {
   padding:"6px 10px",
-  background:"green",
+  background:"#4CAF50",
   color:"white",
   border:"none"
 };
 
-const confirmBtn = {
+const preparingBtn = {
   padding:"6px 10px",
-  background:"blue",
+  background:"#ff9800",
+  color:"white",
+  border:"none"
+};
+
+const outBtn = {
+  padding:"6px 10px",
+  background:"#2196f3",
   color:"white",
   border:"none"
 };
 
 const deliverBtn = {
   padding:"6px 10px",
-  background:"green",
+  background:"#2e7d32",
   color:"white",
   border:"none"
 };
 
 const cancelBtn = {
   padding:"6px 10px",
-  background:"red",
+  background:"#f44336",
   color:"white",
   border:"none"
 };
