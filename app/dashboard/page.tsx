@@ -9,7 +9,7 @@ typeof window !== "undefined"
 ? localStorage.getItem("customerMobile")
 : "";
 
-const [mobile,setMobile] = useState(savedMobile || "");
+const [mobile,setMobile] = useState(localStorage.getItem("customerMobile") || "");
 const [data,setData] = useState<any>(null);
 
 const loadDashboard = async ()=>{
