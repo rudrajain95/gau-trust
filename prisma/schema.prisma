@@ -17,18 +17,20 @@ model Lead {
   status    String   @default("Trial")
   createdAt DateTime @default(now())
 }
+
 model Order {
-  id        String   @id @default(cuid())
-  name      String
-  mobile    String
-  address   String
-  product   String
-  quantity  String
-  payment   String   @default("COD")
-  status    String   @default("Pending")
-  deliveryCharge Float @default(0)
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  name          String
+  mobile        String
+  address       String
+  product       String
+  quantity      String
+  payment       String   @default("COD")
+  status        String   @default("Pending")
+  deliveryCharge Float   @default(0)
+  createdAt     DateTime @default(now())
 }
+
 model Product {
   id        String   @id @default(cuid())
   name      String
@@ -37,6 +39,7 @@ model Product {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 }
+
 model Customer {
   id                String    @id @default(cuid())
   name              String
@@ -47,5 +50,6 @@ model Customer {
   subscription      Boolean   @default(false)
   subscriptionStart DateTime?
   subscriptionEnd   DateTime?
+  coins             Int       @default(0)
   createdAt         DateTime  @default(now())
 }
