@@ -16,14 +16,36 @@ useEffect(()=>{
 
 fetch("/api/products")
 .then(res=>res.json())
-.then(data=>setProducts(data))
+.then(data=>{
+
+const images:any = {
+
+Milk:"https://images.unsplash.com/photo-1563636619-e9143da7973b",
+Paneer:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d",
+Curd:"https://images.unsplash.com/photo-1585238342024-78d387f4a707",
+Butter:"https://images.unsplash.com/photo-1603052875302-d376b7c0638c",
+Ghee:"https://images.unsplash.com/photo-1615485737450-6f4dcd6c5c1d"
+
+};
+
+const newProducts = data.map((p:any)=>({
+
+...p,
+image: images[p.name] || ""
+
+}));
+
+setProducts(newProducts);
+
+})
 
 },[])
 
-const deliveryCharge = selectedProduct?.name === "Milk" ? 0 : 20;
+const deliveryCharge = selectedProduct?.name==="Milk"?0:20;
 
-const totalPrice =
-selectedProduct ? (selectedProduct.price * quantity) + deliveryCharge : 0;
+const totalPrice = selectedProduct
+? (selectedProduct.price * quantity) + deliveryCharge
+: 0;
 
 const placeOrder = async ()=>{
 
@@ -49,7 +71,7 @@ name,
 mobile,
 address,
 product:selectedProduct.name,
-quantity:quantity,
+quantity,
 payment
 
 })
@@ -63,16 +85,8 @@ if(data.success){
 alert("Order placed successfully");
 
 if(data.whatsappUrl){
-
 window.open(data.whatsappUrl,"_blank");
-
 }
-
-setName("");
-setMobile("");
-setAddress("");
-setSelectedProduct(null);
-setQuantity(1);
 
 }else{
 
@@ -84,9 +98,9 @@ alert(data.message);
 
 return(
 
-<div style={{padding:30,fontFamily:"Arial",maxWidth:800}}>
+<div style={{padding:30,fontFamily:"Arial",maxWidth:900}}>
 
-<h1>Order Products</h1>
+<h1>Order Fresh Dairy Products</h1>
 
 <input
 placeholder="Name"
@@ -125,15 +139,25 @@ onClick={()=>setSelectedProduct(p)}
 style={{
 border:"1px solid #ddd",
 padding:20,
-width:160,
-borderRadius:10,
+width:200,
+borderRadius:12,
 cursor:"pointer",
-boxShadow:"0 2px 6px rgba(0,0,0,0.1)",
+boxShadow:"0 2px 8px rgba(0,0,0,0.1)",
 background:selectedProduct?.name===p.name?"#e3f2fd":"white"
 }}
 >
 
-<h3>{p.name}</h3>
+<img
+src={p.image}
+style={{
+width:"100%",
+height:120,
+objectFit:"cover",
+borderRadius:8
+}}
+/>
+
+<h3 style={{marginTop:10}}>{p.name}</h3>
 
 <p>₹{p.price}</p>
 
@@ -152,7 +176,6 @@ background:selectedProduct?.name===p.name?"#e3f2fd":"white"
 
 <button
 onClick={()=>quantity>1 && setQuantity(quantity-1)}
-style={{padding:"6px 12px"}}
 >
 -
 </button>
@@ -161,7 +184,6 @@ style={{padding:"6px 12px"}}
 
 <button
 onClick={()=>setQuantity(quantity+1)}
-style={{padding:"6px 12px"}}
 >
 +
 </button>
@@ -179,9 +201,7 @@ style={{display:"block",marginTop:20,padding:12,width:"100%"}}
 >
 
 <option>Cash on Delivery</option>
-
 <option>UPI Payment</option>
-
 <option>Online Payment</option>
 
 </select>
@@ -205,10 +225,9 @@ onClick={placeOrder}
 style={{
 marginTop:20,
 padding:14,
-background:"#2196f3",
+background:"#1976d2",
 color:"white",
 border:"none",
-fontSize:16,
 borderRadius:8,
 width:"100%"
 }}
