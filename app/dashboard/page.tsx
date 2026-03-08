@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard(){
 
@@ -9,7 +9,17 @@ typeof window !== "undefined"
 ? localStorage.getItem("customerMobile")
 : "";
 
-const [mobile,setMobile] = useState(localStorage.getItem("customerMobile") || "");
+const [mobile,setMobile] = useState("");
+
+useEffect(()=>{
+
+const savedMobile = localStorage.getItem("customerMobile");
+
+if(savedMobile){
+setMobile(savedMobile);
+}
+
+},[])
 const [data,setData] = useState<any>(null);
 
 const loadDashboard = async ()=>{
