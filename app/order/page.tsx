@@ -1,47 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function OrderPage(){
+export default function OrderPage() {
 
+const [products,setProducts] = useState<any[]>([]);
 const [name,setName] = useState("");
 const [mobile,setMobile] = useState("");
 const [address,setAddress] = useState("");
-const [product,setProduct] = useState("");
-const [quantity,setQuantity] = useState("");
+const [selectedProduct,setSelectedProduct] = useState<any>(null);
+const [quantity,setQuantity] = useState(1);
 const [payment,setPayment] = useState("Cash on Delivery");
 
-const products = [
+useEffect(()=>{
 
-{name:"Milk",price:"₹60 / Litre"},
-{name:"Paneer",price:"₹350 / Kg"},
-{name:"Curd",price:"₹80 / Kg"},
-{name:"Butter",price:"₹500 / Kg"},
-{name:"Ghee",price:"₹900 / Litre"}
+fetch("/api/products")
+.then(res=>res.json())
+.then(data=>setProducts(data))
 
-];
+},[])
+
+const deliveryCharge = selectedProduct?.name === "Milk" ? 0 : 20;
+
+const totalPrice =
+selectedProduct ? (selectedProduct.price * quantity) + deliveryCharge : 0;
 
 const placeOrder = async ()=>{
 
-if(!name || !mobile || !address || !product || !quantity){
+if(!name || !mobile || !address || !selectedProduct){
+
 alert("Please fill all fields");
+
 return;
+
 }
 
 const res = await fetch("/api/order",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify({
+
 name,
 mobile,
 address,
-product,
-quantity,
+product:selectedProduct.name,
+quantity:quantity,
 payment
+
 })
-});
+
+})
 
 const data = await res.json();
 
@@ -50,14 +63,16 @@ if(data.success){
 alert("Order placed successfully");
 
 if(data.whatsappUrl){
+
 window.open(data.whatsappUrl,"_blank");
+
 }
 
 setName("");
 setMobile("");
 setAddress("");
-setProduct("");
-setQuantity("");
+setSelectedProduct(null);
+setQuantity(1);
 
 }else{
 
@@ -65,13 +80,13 @@ alert(data.message);
 
 }
 
-};
+}
 
 return(
 
-<div style={{padding:30,fontFamily:"Arial",maxWidth:700}}>
+<div style={{padding:30,fontFamily:"Arial",maxWidth:800}}>
 
-<h1>Customer Order</h1>
+<h1>Order Products</h1>
 
 <input
 placeholder="Name"
@@ -98,41 +113,64 @@ style={{display:"block",marginTop:10,padding:12,width:"100%"}}
 
 <div style={{
 display:"flex",
-gap:20,
 flexWrap:"wrap",
+gap:20,
 marginTop:20
 }}>
 
 {products.map((p)=>(
 <div
-key={p.name}
-onClick={()=>setProduct(p.name)}
+key={p.id}
+onClick={()=>setSelectedProduct(p)}
 style={{
 border:"1px solid #ddd",
 padding:20,
-width:180,
-cursor:"pointer",
+width:160,
 borderRadius:10,
+cursor:"pointer",
 boxShadow:"0 2px 6px rgba(0,0,0,0.1)",
-background: product===p.name ? "#e3f2fd":"white"
+background:selectedProduct?.name===p.name?"#e3f2fd":"white"
 }}
 >
 
 <h3>{p.name}</h3>
 
-<p>{p.price}</p>
+<p>₹{p.price}</p>
 
 </div>
 ))}
 
 </div>
 
-<input
-placeholder="Quantity (Example: 2L)"
-value={quantity}
-onChange={(e)=>setQuantity(e.target.value)}
-style={{display:"block",marginTop:20,padding:12,width:"100%"}}
-/>
+{selectedProduct && (
+
+<div style={{marginTop:30}}>
+
+<h3>Quantity</h3>
+
+<div style={{display:"flex",alignItems:"center",gap:10}}>
+
+<button
+onClick={()=>quantity>1 && setQuantity(quantity-1)}
+style={{padding:"6px 12px"}}
+>
+-
+</button>
+
+<span>{quantity}</span>
+
+<button
+onClick={()=>setQuantity(quantity+1)}
+style={{padding:"6px 12px"}}
+>
++
+</button>
+
+</div>
+
+</div>
+
+)}
 
 <select
 value={payment}
@@ -141,14 +179,26 @@ style={{display:"block",marginTop:20,padding:12,width:"100%"}}
 >
 
 <option>Cash on Delivery</option>
+
 <option>UPI Payment</option>
+
 <option>Online Payment</option>
 
 </select>
 
-<p style={{marginTop:10,color:"#555"}}>
-Milk delivery is free. Other products may include delivery charges.
-</p>
+{selectedProduct && (
+
+<div style={{marginTop:20}}>
+
+<p>Product Price: ₹{selectedProduct.price * quantity}</p>
+
+<p>Delivery Charge: ₹{deliveryCharge}</p>
+
+<h3>Total: ₹{totalPrice}</h3>
+
+</div>
+
+)}
 
 <button
 onClick={placeOrder}
