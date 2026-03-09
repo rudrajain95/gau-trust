@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { auth } from "../firebase";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 export default function Login(){
 
@@ -16,14 +18,15 @@ alert("Enter valid mobile number");
 return;
 }
 
-const { auth } = await import("../firebase");
-const { RecaptchaVerifier, signInWithPhoneNumber } = await import("firebase/auth");
-
 try{
 
-const recaptcha=new RecaptchaVerifier(auth,"recaptcha-container",{
+const recaptcha=new RecaptchaVerifier(
+"recaptcha-container",
+{
 size:"invisible"
-});
+},
+auth
+);
 
 const phone="+91"+mobile;
 
