@@ -1,91 +1,81 @@
-"use client";
+import { PrismaClient } from "@prisma/client";
 
-import { useRouter } from "next/navigation";
+const prisma = new PrismaClient();
 
-export default function Dashboard() {
-  const router = useRouter();
+export default async function AdminDashboard(){
 
-  const logout = () => {
-    document.cookie = "admin_auth=; path=/; max-age=0";
-    router.push("/admin/login");
-  };
+const today = new Date();
 
-  return (
-    <div style={{ padding: 40, fontFamily: "Arial" }}>
-      <h1>Gau Trust Admin Dashboard</h1>
+today.setHours(0,0,0,0);
 
-      <hr />
+const ordersToday = await prisma.order.count({
+where:{
+createdAt:{
+gte:today
+}
+}
+});
 
-      <h3>Milk Business Panel</h3>
+const totalOrders = await prisma.order.count();
 
-      <p>Purchase Price: ₹50 / Litre</p>
-      <p>Selling Price: ₹60 / Litre</p>
-      <p>Profit: ₹10 / Litre</p>
+const customers = await prisma.customer.count();
 
-      <div style={{ marginTop: 20 }}>
-        <button
-          onClick={() => router.push("/admin/leads")}
-          style={{
-            padding: 10,
-            background: "green",
-            color: "white",
-            border: "none",
-            marginRight: 10,
-          }}
-        >
-          View Leads
-        </button>
+const pendingDelivery = await prisma.order.count({
+where:{
+status:{
+in:["Pending","Preparing","Out for Delivery"]
+}
+}
+});
 
-        <button
-          onClick={() => router.push("/admin/orders")}
-          style={{
-            padding: 10,
-            background: "orange",
-            color: "white",
-            border: "none",
-            marginRight: 10,
-          }}
-        >
-          View Orders
-        </button>
+const subscribers = await prisma.customer.count({
+where:{
+subscription:true
+}
+});
 
-        <button
-          onClick={() => router.push("/admin/delivery")}
-          style={{
-            padding: 10,
-            background: "blue",
-            color: "white",
-            border: "none",
-            marginRight: 10,
-          }}
-        >
-          Delivery Dashboard
-        </button>
+return(
 
-        <button
-          onClick={logout}
-          style={{
-            padding: 10,
-            background: "black",
-            color: "white",
-            border: "none",
-          }}
-        >
-          Logout
-        </button>
+<div style={{padding:30,fontFamily:"Arial"}}>
 
-        <a href="/admin/products">
-<button style={{
-background:"purple",
-color:"white",
-padding:"10px 16px",
-border:"none",
-marginRight:10
+<h1>Admin Business Dashboard</h1>
+
+<div style={{
+display:"grid",
+gridTemplateColumns:"repeat(2,1fr)",
+gap:20,
+marginTop:30
 }}>
-Products
-</button>
-</a>
-      </div>
-    </div>
-  );
+
+<div style={{padding:20,background:"#e3f2fd",borderRadius:10}}>
+<h2>Today Orders</h2>
+<p style={{fontSize:30}}>{ordersToday}</p>
+</div>
+
+<div style={{padding:20,background:"#e8f5e9",borderRadius:10}}>
+<h2>Total Orders</h2>
+<p style={{fontSize:30}}>{totalOrders}</p>
+</div>
+
+<div style={{padding:20,background:"#fff3e0",borderRadius:10}}>
+<h2>Total Customers</h2>
+<p style={{fontSize:30}}>{customers}</p>
+</div>
+
+<div style={{padding:20,background:"#fce4ec",borderRadius:10}}>
+<h2>Active Subscribers</h2>
+<p style={{fontSize:30}}>{subscribers}</p>
+</div>
+
+<div style={{padding:20,background:"#ffebee",borderRadius:10}}>
+<h2>Pending Deliveries</h2>
+<p style={{fontSize:30}}>{pendingDelivery}</p>
+</div>
+
+</div>
+
+</div>
+
+)
+
 }
