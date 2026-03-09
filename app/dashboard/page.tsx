@@ -154,6 +154,20 @@ Subscribe ₹199 / Month
 
 <div style={{marginTop:30}}>
 
+ <a href="/profile">
+<button
+style={{
+padding:10,
+background:"#1976d2",
+color:"white",
+border:"none",
+marginLeft:10
+}}
+>
+Profile
+</button>
+</a> 
+  
 <a href="/orders">
 
 <button style={{
