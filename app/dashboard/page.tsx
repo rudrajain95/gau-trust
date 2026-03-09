@@ -1,76 +1,77 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 export default function Dashboard(){
-
-const [mobile,setMobile]=useState("");
-
-useEffect(()=>{
-
-const savedMobile = localStorage.getItem("customerMobile");
-
-if(!savedMobile){
-window.location.href="/login";
-return;
-}
-
-setMobile(savedMobile);
-
-},[]);
 
 return(
 
-<div style={{padding:30,fontFamily:"Arial"}}><h1>Customer Dashboard</h1><p>Logged in as: {mobile}</p><div style={{marginTop:30}}><a href="/order">
-<button style={{
-padding:12,
-marginRight:10,
-background:"#1976d2",
-color:"white",
-border:"none",
-borderRadius:6
+<div style={{
+padding:30,
+fontFamily:"Arial"
+}}><h1>Customer Dashboard</h1><div style={{
+display:"grid",
+gridTemplateColumns:"1fr 1fr",
+gap:20,
+marginTop:30
+}}><a href="/order">
+<div style={{
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center",
+cursor:"pointer"
 }}>
-Order
-</button>
+<h3>Order</h3>
+</div>
 </a><a href="/orders">
-<button style={{
-padding:12,
-marginRight:10,
-background:"#444",
-color:"white",
-border:"none",
-borderRadius:6
+<div style={{
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center"
 }}>
-My Orders
-</button>
+<h3>My Orders</h3>
+</div>
+</a><a href="/subscribe">
+<div style={{
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center"
+}}>
+<h3>Subscription</h3>
+</div>
 </a><a href="/profile">
-<button style={{
-padding:12,
-background:"#555",
-color:"white",
-border:"none",
-borderRadius:6
+<div style={{
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center"
 }}>
-Profile
-</button>
-</a></div><button
+<h3>Profile</h3>
+</div>
+</a><a href="/track">
+<div style={{
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center"
+}}>
+<h3>Track Order</h3>
+</div>
+</a><div
 onClick={()=>{
 localStorage.removeItem("customerMobile");
 window.location.href="/";
 }}
 style={{
-marginTop:40,
-padding:10,
-background:"red",
-color:"white",
-border:"none"
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center",
+cursor:"pointer"
 }}
-
-«»
-
-Logout
-</button>
-
-</div>)
+>
+<h3>Logout</h3>
+</div></div></div>)
 
 }
