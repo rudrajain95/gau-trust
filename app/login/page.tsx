@@ -6,15 +6,24 @@ export default function Login(){
 
 const [mobile,setMobile]=useState("");
 
-const login=()=>{
+const sendOTP=async()=>{
 
-if(!mobile){
-
-alert("Enter mobile number");
-
+if(mobile.length!=10){
+alert("Enter valid mobile number");
 return;
-
 }
+
+const res=await fetch("/api/customer-info",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({mobile})
+});
+
+const data=await res.json();
+
+if(data.success){
 
 localStorage.setItem("customerMobile",mobile);
 
@@ -22,37 +31,50 @@ window.location.href="/dashboard";
 
 }
 
+};
+
 return(
 
-<div style={{padding:40,fontFamily:"Arial"}}>
-
-<h1>Customer Login</h1>
-
-<input
-placeholder="Enter Mobile Number"
+<div style={{
+display:"flex",
+justifyContent:"center",
+alignItems:"center",
+height:"100vh",
+fontFamily:"Arial"
+}}><div style={{
+border:"1px solid #ddd",
+padding:40,
+borderRadius:10,
+width:300,
+textAlign:"center"
+}}><h2>Customer Login</h2><input
+placeholder="Mobile Number"
 value={mobile}
 onChange={(e)=>setMobile(e.target.value)}
-style={{padding:12,width:300}}
+style={{
+marginTop:20,
+padding:12,
+width:"100%"
+}}
 />
 
 <button
-onClick={login}
+onClick={sendOTP}
 style={{
-display:"block",
 marginTop:20,
 padding:12,
-background:"#2196f3",
+width:"100%",
+background:"#1976d2",
 color:"white",
-border:"none"
+border:"none",
+borderRadius:6
 }}
->
 
-Login
+«»
 
+Continue
 </button>
 
-</div>
-
-)
+</div></div>)
 
 }
