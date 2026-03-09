@@ -1,30 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { auth } from "../firebase";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 export default function Login(){
 
 const [mobile,setMobile]=useState("");
 const [otp,setOtp]=useState("");
-const [serverOtp,setServerOtp]=useState("");
 const [step,setStep]=useState(1);
+const [confirmation,setConfirmation]=useState<any>(null);
 
 const sendOTP=async()=>{
 
-const res=await fetch("/api/send-otp",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({mobile})
+if(mobile.length!==10){
+alert("Enter valid mobile number");
+return;
+}
+
+try{
+
+const recaptcha=new RecaptchaVerifier(auth,"recaptcha-container",{
+size:"invisible"
 });
 
-const data=await res.json();
+const phone="+91"+mobile;
 
-if(data.success){
+const result=await signInWithPhoneNumber(auth,phone,recaptcha);
 
-setServerOtp(data.otp);
+setConfirmation(result);
+
 setStep(2);
+
+}catch(err){
+
+alert("OTP send failed");
 
 }
 
@@ -32,13 +42,15 @@ setStep(2);
 
 const verifyOTP=async()=>{
 
-if(otp === serverOtp.toString()){
+try{
+
+await confirmation.confirm(otp);
 
 localStorage.setItem("customerMobile",mobile);
 
 window.location.href="/dashboard";
 
-}else{
+}catch(err){
 
 alert("Invalid OTP");
 
@@ -60,7 +72,7 @@ fontFamily:"Arial"
 border:"1px solid #ddd",
 padding:40,
 borderRadius:10,
-width:300
+width:320
 }}>
 
 <h2>Customer Login</h2>
@@ -70,7 +82,8 @@ width:300
 <>
 
 <input
-placeholder="Mobile"
+type="number"
+placeholder="Mobile Number"
 value={mobile}
 onChange={(e)=>setMobile(e.target.value)}
 style={{padding:12,width:"100%",marginTop:20}}
@@ -84,7 +97,8 @@ padding:12,
 width:"100%",
 background:"#1976d2",
 color:"white",
-border:"none"
+border:"none",
+borderRadius:6
 }}
 >
 Send OTP
@@ -99,6 +113,7 @@ Send OTP
 <>
 
 <input
+type="number"
 placeholder="Enter OTP"
 value={otp}
 onChange={(e)=>setOtp(e.target.value)}
@@ -113,7 +128,8 @@ padding:12,
 width:"100%",
 background:"green",
 color:"white",
-border:"none"
+border:"none",
+borderRadius:6
 }}
 >
 Verify OTP
@@ -123,10 +139,12 @@ Verify OTP
 
 )}
 
-</div>
+<div id="recaptcha-container"></div>
 
 </div>
 
-)
+</div>
+
+);
 
 }
