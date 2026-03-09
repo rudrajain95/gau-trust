@@ -2,84 +2,131 @@
 
 import { useState } from "react";
 
-export default function Login() {
+export default function Login(){
 
-const [mobile, setMobile] = useState("");
+const [mobile,setMobile]=useState("");
+const [otp,setOtp]=useState("");
+const [serverOtp,setServerOtp]=useState("");
+const [step,setStep]=useState(1);
 
-const sendOTP = async () => {
+const sendOTP=async()=>{
 
-if (mobile.length !== 10) {
-  alert("Enter valid mobile number");
-  return;
-}
-
-const res = await fetch("/api/customer-info", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ mobile })
+const res=await fetch("/api/send-otp",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({mobile})
 });
 
-const data = await res.json();
+const data=await res.json();
 
-if (data.success) {
-  localStorage.setItem("customerMobile", mobile);
-  window.location.href = "/dashboard";
+if(data.success){
+
+setServerOtp(data.otp);
+setStep(2);
+
 }
 
 };
 
-return (
-<div
+const verifyOTP=async()=>{
+
+if(otp === serverOtp.toString()){
+
+localStorage.setItem("customerMobile",mobile);
+
+window.location.href="/dashboard";
+
+}else{
+
+alert("Invalid OTP");
+
+}
+
+};
+
+return(
+
+<div style={{
+display:"flex",
+justifyContent:"center",
+alignItems:"center",
+height:"100vh",
+fontFamily:"Arial"
+}}>
+
+<div style={{
+border:"1px solid #ddd",
+padding:40,
+borderRadius:10,
+width:300
+}}>
+
+<h2>Customer Login</h2>
+
+{step===1 && (
+
+<>
+
+<input
+placeholder="Mobile"
+value={mobile}
+onChange={(e)=>setMobile(e.target.value)}
+style={{padding:12,width:"100%",marginTop:20}}
+/>
+
+<button
+onClick={sendOTP}
 style={{
-display: "flex",
-justifyContent: "center",
-alignItems: "center",
-height: "100vh",
-fontFamily: "Arial"
+marginTop:20,
+padding:12,
+width:"100%",
+background:"#1976d2",
+color:"white",
+border:"none"
 }}
 >
-<div
+Send OTP
+</button>
+
+</>
+
+)}
+
+{step===2 && (
+
+<>
+
+<input
+placeholder="Enter OTP"
+value={otp}
+onChange={(e)=>setOtp(e.target.value)}
+style={{padding:12,width:"100%",marginTop:20}}
+/>
+
+<button
+onClick={verifyOTP}
 style={{
-border: "1px solid #ddd",
-padding: 40,
-borderRadius: 10,
-width: 300,
-textAlign: "center"
+marginTop:20,
+padding:12,
+width:"100%",
+background:"green",
+color:"white",
+border:"none"
 }}
 >
+Verify OTP
+</button>
 
-    <h2>Customer Login</h2>
+</>
 
-    <input
-      placeholder="Mobile Number"
-      value={mobile}
-      onChange={(e) => setMobile(e.target.value)}
-      style={{
-        marginTop: 20,
-        padding: 12,
-        width: "100%"
-      }}
-    />
+)}
 
-    <button
-      onClick={sendOTP}
-      style={{
-        marginTop: 20,
-        padding: 12,
-        width: "100%",
-        background: "#1976d2",
-        color: "white",
-        border: "none",
-        borderRadius: 6
-      }}
-    >
-      Continue
-    </button>
-
-  </div>
 </div>
 
-);
+</div>
+
+)
+
 }
