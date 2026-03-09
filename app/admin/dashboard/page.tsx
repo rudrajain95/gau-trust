@@ -1,81 +1,43 @@
-import { PrismaClient } from "@prisma/client";
+"use client";
 
-const prisma = new PrismaClient();
-
-export default async function AdminDashboard(){
-
-const today = new Date();
-
-today.setHours(0,0,0,0);
-
-const ordersToday = await prisma.order.count({
-where:{
-createdAt:{
-gte:today
-}
-}
-});
-
-const totalOrders = await prisma.order.count();
-
-const customers = await prisma.customer.count();
-
-const pendingDelivery = await prisma.order.count({
-where:{
-status:{
-in:["Pending","Preparing","Out for Delivery"]
-}
-}
-});
-
-const subscribers = await prisma.customer.count({
-where:{
-subscription:true
-}
-});
+export default function AdminDashboard(){
 
 return(
 
-<div style={{padding:30,fontFamily:"Arial"}}>
-
-<h1>Admin Business Dashboard</h1>
-
-<div style={{
+<div style={{padding:30,fontFamily:"Arial"}}><h1>Admin Control Panel</h1><div style={{
 display:"grid",
-gridTemplateColumns:"repeat(2,1fr)",
+gridTemplateColumns:"1fr 1fr",
 gap:20,
 marginTop:30
-}}>
-
-<div style={{padding:20,background:"#e3f2fd",borderRadius:10}}>
-<h2>Today Orders</h2>
-<p style={{fontSize:30}}>{ordersToday}</p>
+}}><a href="/admin/products">
+<div style={{padding:30,border:"1px solid #ddd",borderRadius:10,textAlign:"center"}}>
+<h3>Products</h3>
 </div>
-
-<div style={{padding:20,background:"#e8f5e9",borderRadius:10}}>
-<h2>Total Orders</h2>
-<p style={{fontSize:30}}>{totalOrders}</p>
+</a><a href="/admin/orders">
+<div style={{padding:30,border:"1px solid #ddd",borderRadius:10,textAlign:"center"}}>
+<h3>Orders</h3>
 </div>
-
-<div style={{padding:20,background:"#fff3e0",borderRadius:10}}>
-<h2>Total Customers</h2>
-<p style={{fontSize:30}}>{customers}</p>
+</a><a href="/admin/delivery">
+<div style={{padding:30,border:"1px solid #ddd",borderRadius:10,textAlign:"center"}}>
+<h3>Delivery</h3>
 </div>
-
-<div style={{padding:20,background:"#fce4ec",borderRadius:10}}>
-<h2>Active Subscribers</h2>
-<p style={{fontSize:30}}>{subscribers}</p>
+</a><a href="/admin/leads">
+<div style={{padding:30,border:"1px solid #ddd",borderRadius:10,textAlign:"center"}}>
+<h3>Customers</h3>
 </div>
-
-<div style={{padding:20,background:"#ffebee",borderRadius:10}}>
-<h2>Pending Deliveries</h2>
-<p style={{fontSize:30}}>{pendingDelivery}</p>
-</div>
-
-</div>
-
-</div>
-
-)
+</a><div
+onClick={()=>{
+window.location.href="/";
+}}
+style={{
+padding:30,
+border:"1px solid #ddd",
+borderRadius:10,
+textAlign:"center",
+cursor:"pointer"
+}}
+>
+<h3>Logout</h3>
+</div></div></div>)
 
 }
