@@ -44,13 +44,16 @@ export async function POST(req: Request) {
 
     const result = await response.json();
 
-    if (!response.ok) {
-      return NextResponse.json({
-        success: false,
-        message: "Fast2SMS request failed",
-        provider: result,
-      }, { status: 500 });
-    }
+   if (!response.ok) {
+  return NextResponse.json(
+    {
+      success: false,
+      message: result?.message || "Fast2SMS request failed",
+      provider: result
+    },
+    { status: response.status || 500 }
+  );
+}
 
     return NextResponse.json({ success: true });
   } catch (error) {
