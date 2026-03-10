@@ -18,8 +18,7 @@ return;
 
 try{
 
-const firebase = await import("../firebase");
-const auth = firebase.auth;
+const { auth } = await import("../firebase");
 
 const firebaseAuth = await import("firebase/auth");
 
@@ -27,9 +26,9 @@ const RecaptchaVerifier = firebaseAuth.RecaptchaVerifier;
 const signInWithPhoneNumber = firebaseAuth.signInWithPhoneNumber;
 
 const recaptcha = new RecaptchaVerifier(
+auth,
 "recaptcha-container",
-{ size: "invisible" },
-auth
+{ size: "invisible" }
 );
 
 const phone = "+91" + mobile;
@@ -37,17 +36,18 @@ const phone = "+91" + mobile;
 const result = await signInWithPhoneNumber(auth, phone, recaptcha);
 
 setConfirmation(result);
-
 setStep(2);
 
 }catch(err){
 
+console.log(err);
 alert("OTP send failed");
 
 }
 
 };
-const verifyOTP=async()=>{
+
+const verifyOTP = async () => {
 
 try{
 
