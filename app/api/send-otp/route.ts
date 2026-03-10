@@ -1,37 +1,59 @@
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request){
+const prisma = new PrismaClient();
 
-const body = await req.json();
+function generateOtp() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
-const mobile = body.mobile;
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const mobile = String(body.mobile || "").trim();
 
-const otp = Math.floor(100000 + Math.random() * 900000);
+    if (!/^\d{10}$/.test(mobile)) {
+      return NextResponse.json({ success: false, message: "Invalid mobile number" }, { status: 400 });
+    }
 
-const response = await fetch("https://www.fast2sms.com/dev/bulkV2",{
+    const apiKey = process.env.FAST2SMS_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ success: false, message: "FAST2SMS_API_KEY missing in Render environment" }, { status: 500 });
+    }
 
-method:"POST",
+    const otp = generateOtp();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-headers:{
-"authorization":process.env.FAST2SMS_KEY!,
-"Content-Type":"application/json"
-},
+    await prisma.otpCode.upsert({
+      where: { mobile },
+      update: { otp, expiresAt },
+      create: { mobile, otp, expiresAt },
+    });
 
-body:JSON.stringify({
+    const url =
+      `https://www.fast2sms.com/dev/bulkV2` +
+      `?authorization=${encodeURIComponent(apiKey)}` +
+      `&variables_values=${encodeURIComponent(otp)}` +
+      `&route=otp` +
+      `&numbers=${encodeURIComponent(mobile)}`;
 
-route:"otp",
+    const response = await fetch(url, {
+      method: "GET",
+      cache: "no-store",
+    });
 
-variables_values:otp,
+    const result = await response.json();
 
-numbers:mobile
+    if (!response.ok) {
+      return NextResponse.json({
+        success: false,
+        message: "Fast2SMS request failed",
+        provider: result,
+      }, { status: 500 });
+    }
 
-})
-
-});
-
-return NextResponse.json({
-success:true,
-otp
-});
-
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
+  }
 }
