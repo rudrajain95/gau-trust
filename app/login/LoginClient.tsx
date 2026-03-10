@@ -19,7 +19,7 @@ return;
 
 try{
 
-const firebase = await import("../firebase");
+import { getAuth } from "firebase/auth/dist/browser/index.js";
 
 const auth = firebase.auth;
 
