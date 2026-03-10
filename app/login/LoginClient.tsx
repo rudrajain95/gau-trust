@@ -18,7 +18,7 @@ return;
 
 try{
 
-const { auth } = await import("../firebase");
+const { auth } = await import("../firebase").then(m => ({ auth: m.auth }));
 const { RecaptchaVerifier, signInWithPhoneNumber } = await import("firebase/auth");
 
 const recaptcha = new RecaptchaVerifier(
