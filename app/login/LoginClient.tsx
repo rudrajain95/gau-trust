@@ -9,29 +9,32 @@ const [otp,setOtp]=useState("");
 const [step,setStep]=useState(1);
 const [confirmation,setConfirmation]=useState<any>(null);
 
-const sendOTP=async()=>{
+const sendOTP = async () => {
 
-if(mobile.length!==10){
+if(mobile.length !== 10){
 alert("Enter valid mobile number");
 return;
 }
 
 try{
 
-const { auth } = await import("../firebase").then(m => ({ auth: m.auth }));
-const { RecaptchaVerifier, signInWithPhoneNumber } = await import("firebase/auth");
+const firebase = await import("../firebase");
+const auth = firebase.auth;
+
+const firebaseAuth = await import("firebase/auth");
+
+const RecaptchaVerifier = firebaseAuth.RecaptchaVerifier;
+const signInWithPhoneNumber = firebaseAuth.signInWithPhoneNumber;
 
 const recaptcha = new RecaptchaVerifier(
-auth,
 "recaptcha-container",
-{
-size:"invisible"
-}
+{ size: "invisible" },
+auth
 );
 
-const phone="+91"+mobile;
+const phone = "+91" + mobile;
 
-const result = await signInWithPhoneNumber(auth,phone,recaptcha);
+const result = await signInWithPhoneNumber(auth, phone, recaptcha);
 
 setConfirmation(result);
 
@@ -44,7 +47,6 @@ alert("OTP send failed");
 }
 
 };
-
 const verifyOTP=async()=>{
 
 try{
