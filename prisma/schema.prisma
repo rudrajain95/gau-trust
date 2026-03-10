@@ -53,3 +53,11 @@ model Customer {
   coins             Int       @default(0)
   createdAt         DateTime  @default(now())
 }
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  mobile    String   @unique
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
