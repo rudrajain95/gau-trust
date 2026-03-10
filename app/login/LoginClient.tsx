@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 
 export default function LoginClient(){
 
@@ -18,7 +19,9 @@ return;
 
 try{
 
-const { auth } = await import("../firebase");
+const firebase = await import("../firebase");
+
+const auth = firebase.auth;
 
 const firebaseAuth = await import("firebase/auth");
 
@@ -26,9 +29,9 @@ const RecaptchaVerifier = firebaseAuth.RecaptchaVerifier;
 const signInWithPhoneNumber = firebaseAuth.signInWithPhoneNumber;
 
 const recaptcha = new RecaptchaVerifier(
-auth,
 "recaptcha-container",
-{ size: "invisible" }
+{ size:"invisible" },
+auth
 );
 
 const phone = "+91" + mobile;
@@ -36,6 +39,7 @@ const phone = "+91" + mobile;
 const result = await signInWithPhoneNumber(auth, phone, recaptcha);
 
 setConfirmation(result);
+
 setStep(2);
 
 }catch(err){
