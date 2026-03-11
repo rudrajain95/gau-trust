@@ -13,6 +13,7 @@ export default function AdminLogin() {
     const saved = localStorage.getItem("adminPass") || "GauTrust@123";
 
     if (username === "admin" && password === saved) {
+      localStorage.setItem("adminLogin", "true");
       document.cookie = "admin_auth=1; path=/; max-age=86400; samesite=lax";
       router.push("/admin/dashboard");
     } else {
