@@ -9,54 +9,36 @@ function generateOtp() {
 
 export async function POST(req: Request) {
   try {
+
     const body = await req.json();
     const mobile = String(body.mobile || "").trim();
 
-    if (!/^\d{10}$/.test(mobile)) {
-      return NextResponse.json({ success: false, message: "Invalid mobile number" }, { status: 400 });
-    }
-
-    const apiKey = process.env.FAST2SMS_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ success: false, message: "FAST2SMS_API_KEY missing in Render environment" }, { status: 500 });
+    if (!/^[0-9]{10}$/.test(mobile)) {
+      return NextResponse.json({ success:false, message:"Invalid mobile number" });
     }
 
     const otp = generateOtp();
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     await prisma.otpCode.upsert({
-      where: { mobile },
-      update: { otp, expiresAt },
-      create: { mobile, otp, expiresAt },
+      where:{ mobile },
+      update:{ otp },
+      create:{ mobile, otp }
     });
+
+    const authKey = process.env.MSG91_AUTH_KEY;
 
     const url =
-      `https://www.fast2sms.com/dev/bulkV2` +
-      `?authorization=${encodeURIComponent(apiKey)}` +
-      `&variables_values=${encodeURIComponent(otp)}` +
-      `&route=otp` +
-      `&numbers=${encodeURIComponent(mobile)}`;
+    `https://control.msg91.com/api/v5/otp?template_id=YOUR_TEMPLATE_ID&mobile=91${mobile}&authkey=${authKey}&otp=${otp}`;
 
-    const response = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-    });
+    const response = await fetch(url,{ method:"GET" });
 
-    const result = await response.json();
+    if(!response.ok){
+      return NextResponse.json({ success:false, message:"MSG91 OTP failed" });
+    }
 
-   if (!response.ok) {
-  return NextResponse.json(
-    {
-      success: false,
-      message: result?.message || "Fast2SMS request failed",
-      provider: result
-    },
-    { status: response.status || 500 }
-  );
-}
+    return NextResponse.json({ success:true });
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
+  } catch(error){
+    return NextResponse.json({ success:false, message:"Server error" });
   }
 }
