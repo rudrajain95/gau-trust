@@ -19,11 +19,13 @@ export async function POST(req: Request) {
 
     const otp = generateOtp();
 
-    await prisma.otpCode.upsert({
-      where:{ mobile },
-      update:{ otp },
-      create:{ mobile, otp }
-    });
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+await prisma.otpCode.upsert({
+  where:{ mobile },
+  update:{ otp, expiresAt },
+  create:{ mobile, otp, expiresAt }
+});
 
     const authKey = process.env.MSG91_AUTH_KEY;
 
