@@ -30,6 +30,17 @@ gap:30,
 marginTop:40
 }}>
 
+  <a href="/admin/shops">
+<div style={{
+border:"1px solid #ddd",
+padding:30,
+borderRadius:10,
+textAlign:"center"
+}}>
+<h3>Shops</h3>
+</div>
+</a>
+
 <a href="/admin/products">
 <div style={{
 border:"1px solid #ddd",
