@@ -29,10 +29,9 @@ await prisma.otpCode.upsert({
 
     const authKey = process.env.MSG91_AUTH_KEY;
 
-    const url =
-    `https://control.msg91.com/api/v5/otp?template_id=69b13be32c0f73cd3d094c30&mobile=91${mobile}&authkey=${authKey}&otp=${otp}`;
+const url = `https://control.msg91.com/api/v5/otp?template_id=69b13be32c0f73cd3d094c30&mobile=91${mobile}&authkey=${authKey}&otp=${otp}`;
 
-    const response = await fetch(url,{ method:"GET" });
+const response = await fetch(url,{ method:"GET" });
 
     if(!response.ok){
       return NextResponse.json({ success:false, message:"MSG91 OTP failed" });
