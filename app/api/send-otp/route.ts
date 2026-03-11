@@ -21,18 +21,21 @@ export async function POST(req: Request) {
 
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-    await prisma.otpCode.upsert({
-      where:{ mobile },
-      update:{ otp, expiresAt },
-      create:{ mobile, otp, expiresAt }
-    });
+await prisma.otpCode.upsert({
+  where:{ mobile },
+  update:{ otp, expiresAt },
+  create:{ mobile, otp, expiresAt }
+});
 
     const authKey = process.env.MSG91_AUTH_KEY;
 
-    const url =
-      `https://control.msg91.com/api/v5/flow/?authkey=${authKey}&mobile=91${mobile}&OTP=${otp}`;
+const url = `https://control.msg91.com/api/v5/otp?template_id=69b13be32c0f73cd3d094c30&mobile=91${mobile}&authkey=${authKey}&otp=${otp}`;
 
-    await fetch(url,{ method:"GET" });
+const response = await fetch(url,{ method:"GET" });
+
+    if(!response.ok){
+      return NextResponse.json({ success:false, message:"MSG91 OTP failed" });
+    }
 
     return NextResponse.json({ success:true });
 
