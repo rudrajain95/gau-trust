@@ -1,36 +1,61 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState, useEffect } from "react";
 
-export default function AddProduct(){
+export default function AddProductPage(){
 
-const [name,setName] = useState("")
-const [price,setPrice] = useState("")
-const [unit,setUnit] = useState("")
+const [name,setName] = useState("");
+const [price,setPrice] = useState("");
+const [unit,setUnit] = useState("");
 
-const addProduct = async () => {
+useEffect(()=>{
 
-await fetch("/api/products",{
+const admin = localStorage.getItem("adminLogin");
+
+if(!admin){
+window.location.href="/admin/login";
+}
+
+},[]);
+
+const addProduct = async ()=>{
+
+if(!name || !price || !unit){
+alert("Fill all fields");
+return;
+}
+
+const res = await fetch("/api/products/add",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
 name,
-price:parseFloat(price),
+price,
 unit
 })
-})
+});
 
-alert("Product Added")
+const data = await res.json();
 
-window.location.href="/admin/products"
+if(data.success){
+
+alert("Product added");
+
+window.location.href="/admin/products";
+
+}else{
+
+alert(data.message);
 
 }
 
+};
+
 return(
 
-<div style={{padding:30,fontFamily:"Arial"}}>
+<div style={{padding:40,fontFamily:"Arial"}}>
 
 <h1>Add Product</h1>
 
@@ -38,38 +63,47 @@ return(
 placeholder="Product Name"
 value={name}
 onChange={(e)=>setName(e.target.value)}
-style={{display:"block",marginTop:10,padding:10,width:300}}
+style={input}
 />
 
 <input
 placeholder="Price"
 value={price}
 onChange={(e)=>setPrice(e.target.value)}
-style={{display:"block",marginTop:10,padding:10,width:300}}
+style={input}
 />
 
 <input
-placeholder="Unit (Litre / Kg / gm)"
+placeholder="Unit (Litre / Kg / Packet)"
 value={unit}
 onChange={(e)=>setUnit(e.target.value)}
-style={{display:"block",marginTop:10,padding:10,width:300}}
+style={input}
 />
 
 <button
 onClick={addProduct}
-style={{
-marginTop:20,
-padding:10,
-background:"green",
-color:"white",
-border:"none"
-}}
+style={btn}
 >
-Save Product
+Add Product
 </button>
 
 </div>
 
 )
 
+}
+
+const input={
+display:"block",
+marginTop:10,
+padding:10,
+width:300
+}
+
+const btn={
+marginTop:15,
+padding:10,
+background:"green",
+color:"white",
+border:"none"
 }
