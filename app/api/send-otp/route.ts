@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     const authKey = process.env.MSG91_AUTH_KEY;
 
     const url =
-    `https://control.msg91.com/api/v5/otp?template_id=YOUR_TEMPLATE_ID&mobile=91${mobile}&authkey=${authKey}&otp=${otp}`;
+    `https://control.msg91.com/api/v5/otp?template_id=69b13be32c0f73cd3d094c30&mobile=91${mobile}&authkey=${authKey}&otp=${otp}`;
 
     const response = await fetch(url,{ method:"GET" });
 
