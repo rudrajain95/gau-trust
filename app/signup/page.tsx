@@ -15,6 +15,7 @@ alert("Enter valid mobile number");
 return;
 }
 
+
 const res = await fetch("/api/signup",{
 method:"POST",
 headers:{ "Content-Type":"application/json"},
