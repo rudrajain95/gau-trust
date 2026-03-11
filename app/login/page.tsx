@@ -24,7 +24,7 @@ body:JSON.stringify({ mobile })
 const data = await res.json();
 
 if(data.success){
-alert("OTP Sent");
+alert("Your OTP: " + data.testingOtp);
 setStep(2);
 }else{
 alert(data.message);
