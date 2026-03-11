@@ -61,3 +61,13 @@ model OtpCode {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
+model Shop {
+  id        String   @id @default(cuid())
+  name      String
+  ownerName String?
+  mobile    String   @unique
+  address   String
+  area      String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
