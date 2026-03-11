@@ -13,7 +13,22 @@ alignItems:"center",
 padding:20,
 background:"#ffffff",
 borderBottom:"1px solid #eee"
-}}><h2>🐄 Gau Trust Milk</h2><div><a href="/login">
+}}><h2>🐄 Gau Trust Milk</h2><div>
+  <a href="/signup">
+<button
+style={{
+padding:10,
+marginRight:10,
+background:"green",
+color:"white",
+border:"none",
+borderRadius:6
+}}
+>
+Customer Signup
+</button>
+</a>
+  <a href="/login">
 <button style={{
 padding:10,
 marginRight:10,
@@ -24,7 +39,8 @@ borderRadius:6
 }}>
 Customer Login
 </button>
-</a><a href="/admin/login">
+</a>
+  <a href="/admin/login">
 <button style={{
 padding:10,
 background:"#444",
@@ -34,7 +50,8 @@ borderRadius:6
 }}>
 Admin Login
 </button>
-</a></div></div>{/* HERO */}
+</a>
+</div></div>{/* HERO */}
 
 <div style={{
 background:"#e3f2fd",
