@@ -1,106 +1,97 @@
-export const dynamic = "force-dynamic";
+"use client";
 
-import { PrismaClient } from "@prisma/client";
+import { useEffect, useState } from "react";
 
-const prisma = new PrismaClient();
+export default function DeliveryPage(){
 
-export default async function DeliveryPage(){
+const [orders,setOrders] = useState<any[]>([]);
 
-  const orders = await prisma.order.findMany({
-    orderBy:{createdAt:"desc"}
-  })
+useEffect(()=>{
 
-  const today = new Date().toDateString()
+const admin = localStorage.getItem("adminLogin");
 
-  const todayOrders = orders.filter(o =>
-    new Date(o.createdAt).toDateString() === today
-  )
+if(!admin){
+window.location.href="/admin/login";
+return;
+}
 
-  const pending = todayOrders.filter(o => o.status !== "Delivered")
+loadOrders();
 
-  const delivered = todayOrders.filter(o => o.status === "Delivered")
+},[]);
 
-  return(
+const loadOrders = async()=>{
 
-    <div style={{padding:20,fontFamily:"Arial"}}>
+const res = await fetch("/api/admin/orders");
 
-      <h1>Delivery Dashboard</h1>
+const data = await res.json();
 
-      <h2>Today's Orders: {todayOrders.length}</h2>
+setOrders(data);
 
-      <h3>Pending Deliveries: {pending.length}</h3>
+};
 
-      <h3>Delivered: {delivered.length}</h3>
+return(
 
-      <table style={{
-        width:"100%",
-        borderCollapse:"collapse",
-        marginTop:20
-      }}>
+<div style={{padding:20,fontFamily:"Arial"}}>
 
-        <thead>
+<h1>Delivery Dashboard</h1>
 
-          <tr>
+<table style={{
+width:"100%",
+borderCollapse:"collapse",
+marginTop:20
+}}>
 
-            <th style={th}>Name</th>
-            <th style={th}>Product</th>
-            <th style={th}>Qty</th>
-            <th style={th}>Address</th>
-            <th style={th}>Status</th>
-            <th style={th}>Call</th>
+<thead>
 
-          </tr>
+<tr>
 
-        </thead>
+<th style={th}>Name</th>
+<th style={th}>Product</th>
+<th style={th}>Qty</th>
+<th style={th}>Address</th>
+<th style={th}>Status</th>
 
-        <tbody>
+</tr>
 
-          {todayOrders.map((o:any)=>(
-            <tr key={o.id}>
+</thead>
 
-              <td style={td}>{o.name}</td>
+<tbody>
 
-              <td style={td}>{o.product}</td>
+{orders.map((o:any)=>(
 
-              <td style={td}>{o.quantity}</td>
+<tr key={o.id}>
 
-              <td style={td}>{o.address}</td>
+<td style={td}>{o.name}</td>
 
-              <td style={td}>{o.status}</td>
+<td style={td}>{o.product}</td>
 
-              <td style={td}>
-                <a href={`tel:${o.mobile}`}>
-                  <button style={callBtn}>Call</button>
-                </a>
-              </td>
+<td style={td}>{o.quantity}</td>
 
-            </tr>
-          ))}
+<td style={td}>{o.address}</td>
 
-        </tbody>
+<td style={td}>{o.status}</td>
 
-      </table>
+</tr>
 
-    </div>
+))}
 
-  )
+</tbody>
+
+</table>
+
+</div>
+
+)
 
 }
 
-const th = {
-  border:"1px solid #ddd",
-  padding:8,
-  background:"#f5f5f5"
+const th={
+border:"1px solid #ddd",
+padding:8,
+background:"#f5f5f5"
 }
 
-const td = {
-  border:"1px solid #ddd",
-  padding:8
-}
-
-const callBtn = {
-  padding:"6px 10px",
-  background:"green",
-  color:"white",
-  border:"none"
+const td={
+border:"1px solid #ddd",
+padding:8
 }
