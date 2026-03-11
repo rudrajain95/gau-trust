@@ -1,6 +1,18 @@
 "use client";
 
+import { useEffect } from "react";
+
 export default function AdminSettings(){
+
+useEffect(()=>{
+
+const admin = localStorage.getItem("adminLogin");
+
+if(!admin){
+window.location.href="/admin/login";
+}
+
+},[]);
 
 return(
 
