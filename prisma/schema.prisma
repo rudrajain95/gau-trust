@@ -28,6 +28,7 @@ model Order {
   payment        String   @default("COD")
   status         String   @default("Pending")
   deliveryCharge Float    @default(0)
+  shopName       String?
   shopStatus     String   @default("Pending")
   deliveryStatus String   @default("Pending")
   deliveryBoy    String?
@@ -64,6 +65,7 @@ model OtpCode {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
+
 model Shop {
   id        String   @id @default(cuid())
   name      String
