@@ -19,16 +19,19 @@ model Lead {
 }
 
 model Order {
-  id            String   @id @default(cuid())
-  name          String
-  mobile        String
-  address       String
-  product       String
-  quantity      String
-  payment       String   @default("COD")
-  status        String   @default("Pending")
-  deliveryCharge Float   @default(0)
-  createdAt     DateTime @default(now())
+  id             String   @id @default(cuid())
+  name           String
+  mobile         String
+  address        String
+  product        String
+  quantity       String
+  payment        String   @default("COD")
+  status         String   @default("Pending")
+  deliveryCharge Float    @default(0)
+  shopStatus     String   @default("Pending")
+  deliveryStatus String   @default("Pending")
+  deliveryBoy    String?
+  createdAt      DateTime @default(now())
 }
 
 model Product {
