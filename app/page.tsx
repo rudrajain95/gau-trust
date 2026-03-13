@@ -266,7 +266,7 @@ Our Dairy Products
 padding:"70px 30px",
 background:"#1d4ed8",
 color:"white",
-textAlign:"center"
+textAlign:"center" as const
 }}>
 
 <h2>
@@ -292,7 +292,7 @@ Create Customer Account
 padding:30,
 background:"#0f172a",
 color:"#cbd5e1",
-textAlign:"center"
+textAlign:"center" as const
 }}>
 
 <p>© 2026 Gau Trust Milk</p>
@@ -375,7 +375,7 @@ const productCard={
 background:"#ffffff",
 padding:30,
 borderRadius:10,
-textAlign:"center",
+textAlign:"center" as const,
 fontSize:20,
 boxShadow:"0 6px 20px rgba(0,0,0,0.08)"
 }
