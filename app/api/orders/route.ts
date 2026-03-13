@@ -3,12 +3,20 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
-  const orders = await prisma.order.findMany({
-    orderBy: {
-      createdAt: "desc"
-    }
-  });
+export async function GET(){
 
-  return NextResponse.json(orders);
+const orders = await prisma.order.findMany({
+
+where:{
+status:"Pending"
+},
+
+orderBy:{
+createdAt:"desc"
+}
+
+});
+
+return NextResponse.json(orders);
+
 }
