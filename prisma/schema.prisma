@@ -40,8 +40,11 @@ model Product {
   name      String
   price     Float
   unit      String
+  shopId    String
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
+
+  shop      Shop     @relation(fields: [shopId], references: [id])
 }
 
 model Customer {
