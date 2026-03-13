@@ -76,3 +76,18 @@ model Shop {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 }
+
+model Shop {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  latitude  Float?
+  longitude Float?
+  mobile    String
+  password  String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  products  Product[]
+  orders    Order[]
+}
