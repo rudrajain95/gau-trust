@@ -355,7 +355,7 @@ fontSize:16
 const sectionTitle={
 fontSize:32,
 marginBottom:30,
-textAlign:"center"
+textAlign:"center" as const
 }
 
 const grid={
