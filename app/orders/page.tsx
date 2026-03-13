@@ -4,28 +4,30 @@ import { useEffect, useState } from "react";
 
 export default function OrdersPage(){
 
-const [orders,setOrders]=useState<any[]>([]);
+const [orders,setOrders] = useState<any[]>([]);
 
 useEffect(()=>{
 
 const mobile = localStorage.getItem("customerMobile");
 
-const loadOrders=()=>{
+if(!mobile){
+window.location.href="/login";
+return;
+}
 
+const loadOrders = ()=>{
 fetch(`/api/customer-orders?mobile=${mobile}`)
 .then(res=>res.json())
-.then(data=>setOrders(data))
-
-}
+.then(data=>setOrders(data));
+};
 
 loadOrders();
 
-// auto refresh every 5 seconds
-const interval=setInterval(loadOrders,5000);
+const interval = setInterval(loadOrders,5000);
 
 return ()=>clearInterval(interval);
 
-},[])
+},[]);
 
 return(
 
@@ -44,54 +46,47 @@ width:"100%"
 }}>
 
 <thead>
-
 <tr>
-
-<th style={{border:"1px solid #ddd",padding:10}}>Product</th>
-<th style={{border:"1px solid #ddd",padding:10}}>Quantity</th>
-<th style={{border:"1px solid #ddd",padding:10}}>Payment</th>
-<th style={{border:"1px solid #ddd",padding:10}}>Status</th>
-<th style={{border:"1px solid #ddd",padding:10}}>Date</th>
-
+<th style={th}>Product</th>
+<th style={th}>Quantity</th>
+<th style={th}>Payment</th>
+<th style={th}>Shop Status</th>
+<th style={th}>Delivery Status</th>
+<th style={th}>Date</th>
 </tr>
-
 </thead>
 
 <tbody>
 
-{orders.map((o)=>(
+{orders.map((o:any)=>(
+
 <tr key={o.id}>
 
-<td style={{border:"1px solid #ddd",padding:10}}>
-{o.product}
+<td style={td}>{o.product}</td>
+<td style={td}>{o.quantity}</td>
+<td style={td}>{o.payment}</td>
+
+<td style={td}>
+{o.shopStatus==="Pending" && "🟡 Order Received"}
+{o.shopStatus==="Accepted" && "🟢 Shop Accepted"}
+{o.shopStatus==="Rejected" && "🔴 Shop Rejected"}
+{o.shopStatus==="Preparing" && "🟠 Preparing"}
+{o.shopStatus==="Ready" && "📦 Ready for Pickup"}
 </td>
 
-<td style={{border:"1px solid #ddd",padding:10}}>
-{o.quantity}
+<td style={td}>
+{o.deliveryStatus==="Pending" && "⏳ Waiting for Delivery Boy"}
+{o.deliveryStatus==="Picked" && "📦 Picked by Delivery Boy"}
+{o.deliveryStatus==="Out for Delivery" && "🚚 Out for Delivery"}
+{o.deliveryStatus==="Delivered" && "✅ Delivered"}
 </td>
 
-<td style={{border:"1px solid #ddd",padding:10}}>
-{o.payment}
-</td>
-
-<td style={{border:"1px solid #ddd",padding:10}}>
-
-{o.status==="Pending" && "🟡 Order Received"}
-
-{o.status==="Preparing" && "🟠 Preparing"}
-
-{o.status==="Out for Delivery" && "🚚 Out for Delivery"}
-
-{o.status==="Delivered" && "🟢 Delivered"}
-
-{o.status==="Cancelled" && "🔴 Cancelled"}
-</td>
-
-<td style={{border:"1px solid #ddd",padding:10}}>
+<td style={td}>
 {new Date(o.createdAt).toLocaleString()}
 </td>
 
 </tr>
+
 ))}
 
 </tbody>
@@ -103,3 +98,14 @@ width:"100%"
 )
 
 }
+
+const th = {
+border:"1px solid #ddd",
+padding:10,
+background:"#f5f5f5"
+};
+
+const td = {
+border:"1px solid #ddd",
+padding:10
+};
