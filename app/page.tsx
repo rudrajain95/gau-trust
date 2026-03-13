@@ -21,6 +21,19 @@ borderBottom:"1px solid #eee"
 
 <div>
 
+<a href="/signup">
+<button style={{
+padding:10,
+marginRight:10,
+background:"#4CAF50",
+color:"white",
+border:"none",
+borderRadius:6
+}}>
+Customer Signup
+</button>
+</a>
+
 <a href="/login">
 <button style={{
 padding:10,
@@ -43,7 +56,7 @@ color:"white",
 border:"none",
 borderRadius:6
 }}>
-Delivery Login
+Delivery Boy Login
 </button>
 </a>
 
@@ -144,29 +157,12 @@ flexWrap:"wrap",
 marginTop:30
 }}>
 
-<div style={card}>
-<h3>Milk</h3>
-</div>
-
-<div style={card}>
-<h3>Paneer</h3>
-</div>
-
-<div style={card}>
-<h3>Curd</h3>
-</div>
-
-<div style={card}>
-<h3>Butter Milk</h3>
-</div>
-
-<div style={card}>
-<h3>Butter</h3>
-</div>
-
-<div style={card}>
-<h3>Bread</h3>
-</div>
+<div style={card}><h3>Milk</h3></div>
+<div style={card}><h3>Paneer</h3></div>
+<div style={card}><h3>Curd</h3></div>
+<div style={card}><h3>Butter Milk</h3></div>
+<div style={card}><h3>Butter</h3></div>
+<div style={card}><h3>Bread</h3></div>
 
 </div>
 
