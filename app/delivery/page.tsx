@@ -26,6 +26,29 @@ return ()=>clearInterval(interval);
 
 },[]);
 
+
+const updateStatus = async (id:string,status:string)=>{
+
+await fetch("/api/delivery/update-status",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id,
+deliveryStatus:status
+})
+
+});
+
+loadOrders();
+
+};
+
+
 return(
 
 <div style={{padding:30,fontFamily:"Arial"}}>
@@ -50,9 +73,7 @@ borderRadius:8
 
 <p><b>Address:</b> {o.address}</p>
 
-<a
-href={`tel:${o.mobile}`}
->
+<a href={`tel:${o.mobile}`}>
 
 <button style={{marginRight:10}}>
 Call Customer
@@ -65,11 +86,34 @@ href={`https://www.google.com/maps/search/?api=1&query=${o.address}`}
 target="_blank"
 >
 
-<button>
+<button style={{marginRight:10}}>
 Open Map
 </button>
 
 </a>
+
+
+<br/><br/>
+
+<button
+onClick={()=>updateStatus(o.id,"Picked")}
+style={{marginRight:10}}
+>
+Pickup
+</button>
+
+<button
+onClick={()=>updateStatus(o.id,"Out for Delivery")}
+style={{marginRight:10}}
+>
+Out for Delivery
+</button>
+
+<button
+onClick={()=>updateStatus(o.id,"Delivered")}
+>
+Delivered
+</button>
 
 </div>
 
