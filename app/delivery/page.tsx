@@ -26,7 +26,6 @@ return ()=>clearInterval(interval);
 
 },[]);
 
-
 const updateStatus = async (id:string,status:string)=>{
 
 await fetch("/api/delivery/update-status",{
@@ -48,7 +47,6 @@ loadOrders();
 
 };
 
-
 return(
 
 <div style={{padding:30,fontFamily:"Arial"}}>
@@ -68,30 +66,44 @@ borderRadius:8
 <h3>{o.product}</h3>
 
 <p><b>Customer:</b> {o.name}</p>
-
 <p><b>Phone:</b> {o.mobile}</p>
-
 <p><b>Address:</b> {o.address}</p>
 
 <a href={`tel:${o.mobile}`}>
-
 <button style={{marginRight:10}}>
 Call Customer
 </button>
-
 </a>
 
 <a
 href={`https://www.google.com/maps/search/?api=1&query=${o.address}`}
 target="_blank"
 >
-
 <button style={{marginRight:10}}>
-Open Map
+Customer Map
 </button>
-
 </a>
 
+<hr style={{margin:"15px 0"}}/>
+
+<p><b>Shop:</b> {o.shop?.name}</p>
+<p><b>Shop Phone:</b> {o.shop?.mobile}</p>
+<p><b>Shop Address:</b> {o.shop?.address}</p>
+
+<a href={`tel:${o.shop?.mobile}`}>
+<button style={{marginRight:10}}>
+Call Shop
+</button>
+</a>
+
+<a
+href={`https://www.google.com/maps/search/?api=1&query=${o.shop?.address}`}
+target="_blank"
+>
+<button>
+Pickup Map
+</button>
+</a>
 
 <br/><br/>
 
@@ -99,7 +111,7 @@ Open Map
 onClick={()=>updateStatus(o.id,"Picked")}
 style={{marginRight:10}}
 >
-Pickup
+Pickup Done
 </button>
 
 <button
