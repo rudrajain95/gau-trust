@@ -83,7 +83,7 @@ model Shop {
   address   String
   latitude  Float?
   longitude Float?
-  mobile    String
+  mobile    String   @unique
   password  String?
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
