@@ -30,6 +30,7 @@ model Order {
   quantity      String
   payment       String   @default("COD")
   status        String   @default("Pending")
+  shopStatus    String?  @default("Pending")
   deliveryCharge Float   @default(0)
   createdAt     DateTime @default(now())
 
