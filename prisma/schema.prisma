@@ -20,7 +20,7 @@ model Lead {
 
 model Order {
   id            String   @id @default(cuid())
-  shopId        String
+  shopId        String?
   name          String
   mobile        String
   address       String
@@ -33,7 +33,7 @@ model Order {
   deliveryCharge Float   @default(0)
   createdAt     DateTime @default(now())
 
-  shop          Shop     @relation(fields:[shopId], references:[id])
+  shop          Shop?     @relation(fields:[shopId], references:[id])
 }
 
 model Product {
@@ -41,11 +41,11 @@ model Product {
   name      String
   price     Float
   unit      String
-  shopId    String
+  shopId    String?
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 
-  shop      Shop     @relation(fields: [shopId], references: [id])
+  shop      Shop?     @relation(fields: [shopId], references: [id])
 }
 
 model Customer {
@@ -77,7 +77,7 @@ model Shop {
   latitude  Float?
   longitude Float?
   mobile    String
-  password  String
+  password  String?
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 
