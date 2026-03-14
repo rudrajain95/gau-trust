@@ -2,62 +2,72 @@
 
 import { useEffect, useState } from "react";
 
-export default function OrderPage() {
+export default function OrderPage(){
 
-const [products,setProducts] = useState<any[]>([]);
-const [name,setName] = useState("");
-const [mobile,setMobile] = useState("");
-const [address,setAddress] = useState("");
-const [selectedProduct,setSelectedProduct] = useState<any>(null);
-const [quantity,setQuantity] = useState(1);
-const [payment,setPayment] = useState("Cash on Delivery");
+const [products,setProducts]=useState<any[]>([]);
+const [shops,setShops]=useState<any[]>([]);
+const [cart,setCart]=useState<any[]>([]);
+
+const [selectedShop,setSelectedShop]=useState<any>(null);
+
+const [name,setName]=useState("");
+const [mobile,setMobile]=useState("");
+const [address,setAddress]=useState("");
 
 useEffect(()=>{
 
 fetch("/api/products")
 .then(res=>res.json())
-.then(data=>{
+.then(data=>setProducts(data))
 
-const images:any = {
-
-Milk:"https://images.unsplash.com/photo-1563636619-e9143da7973b",
-Paneer:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d",
-Curd:"https://images.unsplash.com/photo-1585238342024-78d387f4a707",
-Butter:"https://images.unsplash.com/photo-1603052875302-d376b7c0638c",
-Ghee:"https://images.unsplash.com/photo-1615485737450-6f4dcd6c5c1d"
-
-};
-
-const newProducts = data.map((p:any)=>({
-
-...p,
-image: images[p.name] || ""
-
-}));
-
-setProducts(newProducts);
-
-})
+fetch("/api/shops")
+.then(res=>res.json())
+.then(data=>setShops(data))
 
 },[])
 
-const deliveryCharge = selectedProduct?.name==="Milk"?0:20;
+const addToCart=(product:any)=>{
 
-const totalPrice = selectedProduct
-? (selectedProduct.price * quantity) + deliveryCharge
-: 0;
+const existing=cart.find(c=>c.id===product.id)
 
-const placeOrder = async ()=>{
+if(existing){
 
-if(!name || !mobile || !address || !selectedProduct){
+setCart(cart.map(c=>
+c.id===product.id
+? {...c,quantity:c.quantity+1}
+: c
+))
 
-alert("Please fill all fields");
+}else{
 
-return;
+setCart([...cart,{
+...product,
+quantity:1
+}])
 
 }
 
-const res = await fetch("/api/order",{
+}
+
+const removeFromCart=(id:string)=>{
+
+setCart(cart.filter(c=>c.id!==id))
+
+}
+
+const placeOrder=async()=>{
+
+if(!selectedShop){
+alert("Select shop first")
+return
+}
+
+if(cart.length===0){
+alert("Cart empty")
+return
+}
+
+const res=await fetch("/api/order-cart",{
 
 method:"POST",
 
@@ -70,27 +80,20 @@ body:JSON.stringify({
 name,
 mobile,
 address,
-product:selectedProduct.name,
-quantity,
-payment
+shopId:selectedShop.id,
+items:cart
 
 })
 
 })
 
-const data = await res.json();
+const data=await res.json()
 
 if(data.success){
 
-alert("Order placed successfully");
+alert("Order placed")
 
-if(data.whatsappUrl){
-window.open(data.whatsappUrl,"_blank");
-}
-
-}else{
-
-alert(data.message);
+setCart([])
 
 }
 
@@ -98,138 +101,83 @@ alert(data.message);
 
 return(
 
-<div style={{padding:30,fontFamily:"Arial",maxWidth:900}}>
+<div style={{padding:30,fontFamily:"Arial"}}>
 
-<h1>Order Fresh Dairy Products</h1>
+<h1>Order Dairy Products</h1>
 
-<input
-placeholder="Name"
-value={name}
-onChange={(e)=>setName(e.target.value)}
-style={{display:"block",marginTop:10,padding:12,width:"100%"}}
-/>
+<h2>Select Shop</h2>
 
-<input
-placeholder="Mobile"
-value={mobile}
-onChange={(e)=>setMobile(e.target.value)}
-style={{display:"block",marginTop:10,padding:12,width:"100%"}}
-/>
+<div style={{display:"flex",gap:20}}>
 
-<input
-placeholder="Address"
-value={address}
-onChange={(e)=>setAddress(e.target.value)}
-style={{display:"block",marginTop:10,padding:12,width:"100%"}}
-/>
+{shops.map((s)=>(
+<div
+key={s.id}
+onClick={()=>setSelectedShop(s)}
+style={{
+border:"1px solid #ddd",
+padding:20,
+cursor:"pointer",
+background:selectedShop?.id===s.id?"#e3f2fd":"white"
+}}
+>
+<h3>{s.name}</h3>
+<p>{s.address}</p>
+<p>{s.mobile}</p>
+</div>
+))}
 
-<h2 style={{marginTop:30}}>Select Product</h2>
+</div>
 
-<div style={{
-display:"flex",
-flexWrap:"wrap",
-gap:20,
-marginTop:20
-}}>
+<h2 style={{marginTop:40}}>Products</h2>
+
+<div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
 
 {products.map((p)=>(
 <div
 key={p.id}
-onClick={()=>setSelectedProduct(p)}
 style={{
 border:"1px solid #ddd",
 padding:20,
-width:200,
-borderRadius:12,
-cursor:"pointer",
-boxShadow:"0 2px 8px rgba(0,0,0,0.1)",
-background:selectedProduct?.name===p.name?"#e3f2fd":"white"
+width:180
 }}
 >
 
-<img
-src={p.image}
-style={{
-width:"100%",
-height:120,
-objectFit:"cover",
-borderRadius:8
-}}
-/>
-
-<h3 style={{marginTop:10}}>{p.name}</h3>
-
+<h3>{p.name}</h3>
 <p>₹{p.price}</p>
+
+<button
+onClick={()=>addToCart(p)}
+>
+Add
+</button>
 
 </div>
 ))}
 
 </div>
 
-{selectedProduct && (
+<h2 style={{marginTop:40}}>Cart</h2>
 
-<div style={{marginTop:30}}>
+{cart.map((c)=>(
+<div key={c.id}>
 
-<h3>Quantity</h3>
+{c.name} × {c.quantity}
 
-<div style={{display:"flex",alignItems:"center",gap:10}}>
-
-<button
-onClick={()=>quantity>1 && setQuantity(quantity-1)}
->
--
-</button>
-
-<span>{quantity}</span>
-
-<button
-onClick={()=>setQuantity(quantity+1)}
->
-+
+<button onClick={()=>removeFromCart(c.id)}>
+Remove
 </button>
 
 </div>
-
-</div>
-
-)}
-
-<select
-value={payment}
-onChange={(e)=>setPayment(e.target.value)}
-style={{display:"block",marginTop:20,padding:12,width:"100%"}}
->
-
-<option>Cash on Delivery</option>
-<option>UPI Payment</option>
-<option>Online Payment</option>
-
-</select>
-
-{selectedProduct && (
-
-<div style={{marginTop:20}}>
-
-<p>Product Price: ₹{selectedProduct.price * quantity}</p>
-
-<p>Delivery Charge: ₹{deliveryCharge}</p>
-
-<h3>Total: ₹{totalPrice}</h3>
-
-</div>
-
-)}
+))}
 
 <button
 onClick={placeOrder}
 style={{
-marginTop:20,
-padding:14,
-background:"#1976d2",
+marginTop:30,
+padding:12,
+background:"green",
 color:"white",
-border:"none",
-borderRadius:8,
-width:"100%"
+border:"none"
 }}
 >
 
