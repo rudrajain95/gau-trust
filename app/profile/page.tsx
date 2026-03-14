@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect,useState } from "react";
 
-export default function Profile(){
+export default function ProfilePage(){
 
 const [customer,setCustomer]=useState<any>(null);
 
@@ -12,12 +12,12 @@ const mobile = localStorage.getItem("customerMobile");
 
 fetch(`/api/customer-profile?mobile=${mobile}`)
 .then(res=>res.json())
-.then(data=>setCustomer(data));
+.then(data=>setCustomer(data))
 
-},[]);
+},[])
 
 if(!customer){
-return <p>Loading...</p>
+return <div style={{padding:30}}>Loading...</div>
 }
 
 return(
@@ -35,22 +35,6 @@ return(
 <p><b>Wallet Coins:</b> {customer.coins}</p>
 
 <p><b>Subscription:</b> {customer.subscription ? "Active" : "Not Active"}</p>
-
-<button
-onClick={()=>{
-localStorage.removeItem("customerMobile");
-window.location.href="/";
-}}
-style={{
-marginTop:20,
-padding:10,
-background:"red",
-color:"white",
-border:"none"
-}}
->
-Logout
-</button>
 
 </div>
 
