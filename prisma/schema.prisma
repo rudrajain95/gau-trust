@@ -80,14 +80,15 @@ model OtpCode {
 model Shop {
   id        String   @id @default(cuid())
   name      String
+  ownerName String?
+  mobile    String   @unique
   address   String
+  area      String?
   latitude  Float?
   longitude Float?
-  mobile    String   @unique
   password  String?
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
-
   products  Product[]
   orders    Order[]
 }
