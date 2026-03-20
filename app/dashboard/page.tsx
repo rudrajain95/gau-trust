@@ -2,112 +2,114 @@
 
 import { useEffect } from "react";
 
-export default function Dashboard(){
+export default function Dashboard() {
+  useEffect(() => {
+    const mobile = localStorage.getItem("customerMobile");
 
-useEffect(()=>{
+    if (!mobile) {
+      window.location.href = "/login";
+    }
+  }, []);
 
-const mobile = localStorage.getItem("customerMobile");
+  return (
+    <div
+      style={{
+        padding: 30,
+        fontFamily: "Arial",
+      }}
+    >
+      <h1>My Account</h1>
 
-if(!mobile){
-window.location.href="/login";
-}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 20,
+          marginTop: 30,
+        }}
+      >
+        <a href="/order">
+          <div
+            style={{
+              padding: 30,
+              border: "1px solid #ddd",
+              borderRadius: 10,
+              textAlign: "center",
+              cursor: "pointer",
+            }}
+          >
+            <h3>Place Order</h3>
+          </div>
+        </a>
 
-},[]);
+        <a href="/orders">
+          <div
+            style={{
+              padding: 30,
+              border: "1px solid #ddd",
+              borderRadius: 10,
+              textAlign: "center",
+            }}
+          >
+            <h3>Order History</h3>
+          </div>
+        </a>
 
-return(
+        <a href="/subscribe">
+          <div
+            style={{
+              padding: 30,
+              border: "1px solid #ddd",
+              borderRadius: 10,
+              textAlign: "center",
+            }}
+          >
+            <h3>Membership Plan</h3>
+          </div>
+        </a>
 
-<div style={{
-padding:30,
-fontFamily:"Arial"
-}}>
+        <a href="/profile">
+          <div
+            style={{
+              padding: 30,
+              border: "1px solid #ddd",
+              borderRadius: 10,
+              textAlign: "center",
+            }}
+          >
+            <h3>My Profile</h3>
+          </div>
+        </a>
 
-<h1>Customer Dashboard</h1>
+        <a href="/track">
+          <div
+            style={{
+              padding: 30,
+              border: "1px solid #ddd",
+              borderRadius: 10,
+              textAlign: "center",
+            }}
+          >
+            <h3>Live Order Tracking</h3>
+          </div>
+        </a>
 
-<div style={{
-display:"grid",
-gridTemplateColumns:"1fr 1fr",
-gap:20,
-marginTop:30
-}}>
-
-<a href="/order">
-<div style={{
-padding:30,
-border:"1px solid #ddd",
-borderRadius:10,
-textAlign:"center",
-cursor:"pointer"
-}}>
-<h3>Order</h3>
-</div>
-</a>
-
-<a href="/orders">
-<div style={{
-padding:30,
-border:"1px solid #ddd",
-borderRadius:10,
-textAlign:"center"
-}}>
-<h3>My Orders</h3>
-</div>
-</a>
-
-<a href="/subscribe">
-<div style={{
-padding:30,
-border:"1px solid #ddd",
-borderRadius:10,
-textAlign:"center"
-}}>
-<h3>Subscription</h3>
-</div>
-</a>
-
-<a href="/profile">
-<div style={{
-padding:30,
-border:"1px solid #ddd",
-borderRadius:10,
-textAlign:"center"
-}}>
-<h3>Profile</h3>
-</div>
-</a>
-
-<a href="/track">
-<div style={{
-padding:30,
-border:"1px solid #ddd",
-borderRadius:10,
-textAlign:"center"
-}}>
-<h3>Track Order</h3>
-</div>
-</a>
-
-<div
-onClick={()=>{
-localStorage.removeItem("customerMobile");
-window.location.href="/";
-}}
-style={{
-padding:30,
-border:"1px solid #ddd",
-borderRadius:10,
-textAlign:"center",
-cursor:"pointer"
-}}
->
-
-<h3>Logout</h3>
-
-</div>
-
-</div>
-
-</div>
-
-)
-
+        <div
+          onClick={() => {
+            localStorage.removeItem("customerMobile");
+            window.location.href = "/";
+          }}
+          style={{
+            padding: 30,
+            border: "1px solid #ddd",
+            borderRadius: 10,
+            textAlign: "center",
+            cursor: "pointer",
+          }}
+        >
+          <h3>Logout</h3>
+        </div>
+      </div>
+    </div>
+  );
 }
