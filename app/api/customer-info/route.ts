@@ -3,29 +3,37 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request){
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const mobile = String(body.mobile || "").trim();
 
-const body = await req.json();
-const { mobile } = body;
+    if (!/^\d{10}$/.test(mobile)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid mobile number" },
+        { status: 400 }
+      );
+    }
 
-let customer = await prisma.customer.findUnique({
-where:{ mobile }
-});
+    const customer = await prisma.customer.findUnique({
+      where: { mobile },
+    });
 
-if(!customer){
+    if (!customer) {
+      return NextResponse.json(
+        { success: false, message: "Customer not found" },
+        { status: 404 }
+      );
+    }
 
-customer = await prisma.customer.create({
-data:{
-mobile,
-name:"New Customer",
-address:""
-}
-});
-
-}
-
-return NextResponse.json({
-success:true
-});
-
+    return NextResponse.json({
+      success: true,
+      customer,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
