@@ -42,7 +42,7 @@ export default function OrdersPage() {
 
   return (
     <div style={{ padding: 20, fontFamily: "Arial" }}>
-      <h1>Customer Orders</h1>
+<h1>Order Management</h1>
 
       <table style={{
         width: "100%",
