@@ -7,12 +7,18 @@ export default function AdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/admin/login");
+    const admin = localStorage.getItem("adminLogin");
+
+    if (admin) {
+      router.push("/admin/dashboard");
+    } else {
+      router.push("/admin/login");
+    }
   }, [router]);
 
   return (
     <div style={{ padding: 40, fontFamily: "Arial" }}>
-      Redirecting to login...
+      Redirecting...
     </div>
   );
 }
