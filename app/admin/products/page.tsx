@@ -73,7 +73,7 @@ return(
 
 <div style={{padding:20,fontFamily:"Arial"}}>
 
-<h1>Gau Trust Milk - Products</h1>
+<h1>Product Catalog</h1>
 
 <a href="/admin/products/add">
 <button style={{
