@@ -83,7 +83,7 @@ background:"green",
 color:"white",
 border:"none"
 }}>
-Add Product
+Add New Product
 </button>
 </a>
 
@@ -95,11 +95,11 @@ marginTop:20
 
 <thead>
 <tr>
-<th style={th}>Product</th>
+<th style={th}>Product Name</th>
 <th style={th}>Price</th>
 <th style={th}>Unit</th>
-<th style={th}>Status</th>
-<th style={th}>Action</th>
+<th style={th}>Visibility Status</th>
+<th style={th}>Actions</th>
 </tr>
 </thead>
 
