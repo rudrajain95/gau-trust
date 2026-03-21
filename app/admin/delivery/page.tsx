@@ -33,7 +33,7 @@ return(
 
 <div style={{padding:20,fontFamily:"Arial"}}>
 
-<h1>Delivery Dashboard</h1>
+<h1>Delivery Operations</h1>
 
 <table style={{
 width:"100%",
