@@ -80,7 +80,7 @@ export default function AdminShopsPage() {
 
   return (
     <div style={{ padding: 30, fontFamily: "Arial" }}>
-      <h1>Shop Management</h1>
+<h1>Shop Partners</h1>
 
       <div style={{
         border: "1px solid #ddd",
