@@ -17,13 +17,13 @@ export default function AdminLogin() {
       document.cookie = "admin_auth=1; path=/; max-age=86400; samesite=lax";
       router.push("/admin/dashboard");
     } else {
-      alert("Wrong login");
+      alert("Invalid admin username or password");
     }
   };
 
   return (
     <div style={{ padding: 40, fontFamily: "Arial" }}>
-      <h2>Gau Trust Milk Admin Login</h2>
+      <h2>Admin Access Portal</h2>
 
       <input
         placeholder="Username"
