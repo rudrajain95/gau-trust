@@ -117,7 +117,7 @@ marginBottom:20
 
 <div style={card}>
 <h2>{customers.filter((c:any)=>c.displayStatus==="Expired").length}</h2>
-<p>Expired</p>
+<p>Inactive Users</p>
 </div>
 
 </div>
@@ -158,10 +158,10 @@ marginTop:20
 <td style={td}>{c.address}</td>
 
 <td style={td}>
-{c.displayStatus==="Trial Active" && "🟡 Trial Active"}
-{c.displayStatus==="Trial Expired" && "🔴 Trial Expired"}
-{c.displayStatus==="Subscriber" && "🟢 Subscriber"}
-{c.displayStatus==="Expired" && "⚫ Expired"}
+{c.displayStatus==="Trial Active" && "🟡 Free Trial Active"}
+{c.displayStatus==="Trial Expired" && "🟠 Trial Ended"}
+{c.displayStatus==="Subscriber" && "🟢 Active Subscriber"}
+{c.displayStatus==="Expired" && "⚫ Inactive"}
 </td>
 
 <td style={td}>{c.coins}</td>
