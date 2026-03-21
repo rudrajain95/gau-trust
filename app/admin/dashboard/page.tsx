@@ -37,7 +37,7 @@ padding:30,
 borderRadius:10,
 textAlign:"center"
 }}>
-<h3>Shops</h3>
+<h3>Shop Partners</h3>
 </div>
 </a>
 
@@ -48,7 +48,7 @@ padding:30,
 borderRadius:10,
 textAlign:"center"
 }}>
-<h3>Products</h3>
+<h3>Product Catalog</h3>
 </div>
 </a>
 
@@ -59,7 +59,7 @@ padding:30,
 borderRadius:10,
 textAlign:"center"
 }}>
-<h3>Orders</h3>
+<h3>Order Management</h3>
 </div>
 </a>
 
@@ -70,7 +70,7 @@ padding:30,
 borderRadius:10,
 textAlign:"center"
 }}>
-<h3>Delivery</h3>
+<h3>Delivery Operations</h3>
 </div>
 </a>
 
@@ -81,7 +81,7 @@ padding:30,
 borderRadius:10,
 textAlign:"center"
 }}>
-<h3>Customers</h3>
+<h3>Customer Management</h3>
 </div>
 </a>
 
@@ -91,8 +91,7 @@ border:"1px solid #ddd",
 padding:30,
 borderRadius:10,
 textAlign:"center"
-}}>
-<h3>Settings</h3>
+<h3>Platform Settings</h3>
 </div>
 </a>
 
