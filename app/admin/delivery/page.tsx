@@ -45,11 +45,11 @@ marginTop:20
 
 <tr>
 
-<th style={th}>Name</th>
+<th style={th}>Customer Name</th>
 <th style={th}>Product</th>
-<th style={th}>Qty</th>
-<th style={th}>Address</th>
-<th style={th}>Status</th>
+<th style={th}>Quantity</th>
+<th style={th}>Delivery Address</th>
+<th style={th}>Delivery Status</th>
 
 </tr>
 
