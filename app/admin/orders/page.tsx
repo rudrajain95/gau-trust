@@ -51,17 +51,17 @@ export default function OrdersPage() {
       }}>
         <thead>
           <tr>
-            <th style={th}>Time</th>
-            <th style={th}>Name</th>
-            <th style={th}>Mobile</th>
-            <th style={th}>Product</th>
-            <th style={th}>Qty</th>
-            <th style={th}>Payment</th>
-            <th style={th}>Address</th>
-            <th style={th}>Shop Status</th>
-            <th style={th}>Delivery Status</th>
-            <th style={th}>Delivery Boy</th>
-            <th style={th}>Shop Action</th>
+            <th style={th}>Order Time</th>
+<th style={th}>Customer Name</th>
+<th style={th}>Mobile Number</th>
+<th style={th}>Product</th>
+<th style={th}>Quantity</th>
+<th style={th}>Payment Method</th>
+<th style={th}>Delivery Address</th>
+<th style={th}>Shop Processing</th>
+<th style={th}>Delivery Progress</th>
+<th style={th}>Assigned Delivery Partner</th>
+<th style={th}>Shop Actions</th>
           </tr>
         </thead>
 
