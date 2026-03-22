@@ -12,7 +12,7 @@ export default function ShopLoginPage() {
       return;
     }
 
-    const res = await fetch("/api/shop/login", {
+    const res = await fetch("/api/shops/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
