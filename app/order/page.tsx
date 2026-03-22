@@ -16,11 +16,11 @@ const [address,setAddress]=useState("");
 
 useEffect(()=>{
 
-fetch("/api/products")
+fetch("/api/products/list")
 .then(res=>res.json())
 .then(data=>setProducts(data))
 
-fetch("/api/shops")
+fetch("/api/shops/list")
 .then(res=>res.json())
 .then(data=>setShops(data))
 
