@@ -12,7 +12,7 @@ const shopId = typeof window !== "undefined"
 
 const loadOrders=async()=>{
 
-const res = await fetch(`/api/shop/orders?shopId=${shopId}`);
+const res = await fetch(`/api/shops/orders?shopId=${shopId}`);
 const data = await res.json();
 
 setOrders(data);
@@ -31,7 +31,7 @@ return ()=>clearInterval(interval);
 
 const updateStatus = async (id:string,status:string)=>{
 
-await fetch("/api/shop/update-order",{
+await fetch("/api/shops/update-order",{
 
 method:"POST",
 
