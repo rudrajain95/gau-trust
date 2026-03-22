@@ -17,13 +17,12 @@ const [address,setAddress]=useState("");
 useEffect(()=>{
 
 fetch("/api/products/list")
-.then(res=>res.json())
-.then(data=>setProducts(data))
+  .then((res) => res.json())
+  .then((data) => setProducts(data));
 
 fetch("/api/shops/list")
-.then(res=>res.json())
-.then(data=>setShops(data))
-
+  .then((res) => res.json())
+  .then((data) => setShops(data));
 },[])
 
 const addToCart=(product:any)=>{
