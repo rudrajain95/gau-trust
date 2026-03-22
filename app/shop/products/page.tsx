@@ -12,7 +12,7 @@ const shopId = typeof window!=="undefined"
 
 const loadProducts=async()=>{
 
-const res=await fetch(`/api/shop/products?shopId=${shopId}`);
+const res=await fetch(`/api/shops/products?shopId=${shopId}`);
 const data=await res.json();
 
 setProducts(data);
