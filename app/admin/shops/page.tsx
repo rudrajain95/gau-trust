@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 
 export default function AdminShopsPage() {
   const [shops, setShops] = useState<any[]>([]);
-  const [name, setName] = useState("");
-  const [ownerName, setOwnerName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [address, setAddress] = useState("");
-  const [area, setArea] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    ownerName: "",
+    mobile: "",
+    address: "",
+    area: ""
+  });
+
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const admin = localStorage.getItem("adminLogin");
@@ -33,27 +37,25 @@ export default function AdminShopsPage() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        name,
-        ownerName,
-        mobile,
-        address,
-        area
-      })
+      body: JSON.stringify(form)
     });
 
     const data = await res.json();
 
     if (data.success) {
-      alert("Shop added");
-      setName("");
-      setOwnerName("");
-      setMobile("");
-      setAddress("");
-      setArea("");
+      setMessage("✅ Shop created | Default Password: " + data.defaultPassword);
+
+      setForm({
+        name: "",
+        ownerName: "",
+        mobile: "",
+        address: "",
+        area: ""
+      });
+
       loadShops();
     } else {
-      alert(data.message);
+      setMessage("❌ " + data.message);
     }
   };
 
@@ -73,134 +75,102 @@ export default function AdminShopsPage() {
 
     if (data.success) {
       loadShops();
-    } else {
-      alert(data.message);
     }
   };
 
   return (
-    <div style={{ padding: 30, fontFamily: "Arial" }}>
-<h1>Shop Partners</h1>
+    <div className="page-container">
+      <h1 className="page-title">Shop Partners Management</h1>
 
-      <div style={{
-        border: "1px solid #ddd",
-        padding: 20,
-        borderRadius: 10,
-        marginTop: 20,
-        maxWidth: 500
-      }}>
-        <h3>Add Shop</h3>
+      {/* ADD SHOP FORM */}
+      <div className="card" style={{ maxWidth: 500 }}>
+        <h3>Add New Shop</h3>
 
         <input
           placeholder="Shop Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={input}
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
+
+        <br /><br />
 
         <input
           placeholder="Owner Name"
-          value={ownerName}
-          onChange={(e) => setOwnerName(e.target.value)}
-          style={input}
+          value={form.ownerName}
+          onChange={(e) => setForm({ ...form, ownerName: e.target.value })}
         />
 
+        <br /><br />
+
         <input
-          placeholder="Mobile Number"
-          value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
-          style={input}
+          placeholder="Mobile"
+          value={form.mobile}
+          onChange={(e) => setForm({ ...form, mobile: e.target.value })}
         />
+
+        <br /><br />
 
         <input
           placeholder="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          style={input}
+          value={form.address}
+          onChange={(e) => setForm({ ...form, address: e.target.value })}
         />
+
+        <br /><br />
 
         <input
           placeholder="Area"
-          value={area}
-          onChange={(e) => setArea(e.target.value)}
-          style={input}
+          value={form.area}
+          onChange={(e) => setForm({ ...form, area: e.target.value })}
         />
 
-        <button
-          onClick={addShop}
-          style={{
-            marginTop: 15,
-            padding: 10,
-            background: "green",
-            color: "white",
-            border: "none",
-            borderRadius: 6
-          }}
-        >
-          Add Shop
+        <br /><br />
+
+        <button className="primary-btn" onClick={addShop}>
+          Create Shop
         </button>
+
+        <p style={{ marginTop: 10 }}>{message}</p>
       </div>
 
-      <table style={{
-        width: "100%",
-        borderCollapse: "collapse",
-        marginTop: 30
-      }}>
-        <thead>
-          <tr>
-            <th style={th}>Shop</th>
-            <th style={th}>Owner</th>
-            <th style={th}>Mobile</th>
-            <th style={th}>Area</th>
-            <th style={th}>Status</th>
-            <th style={th}>Action</th>
-          </tr>
-        </thead>
+      {/* SHOP LIST */}
+      <div className="card" style={{ marginTop: 30 }}>
+        <h3>All Shops</h3>
 
-        <tbody>
-          {shops.map((shop) => (
-            <tr key={shop.id}>
-              <td style={td}>{shop.name}</td>
-              <td style={td}>{shop.ownerName || "-"}</td>
-              <td style={td}>{shop.mobile}</td>
-              <td style={td}>{shop.area || "-"}</td>
-              <td style={td}>{shop.active ? "Active" : "Disabled"}</td>
-              <td style={td}>
-                <button
-                  onClick={() => toggleShop(shop)}
-                  style={{
-                    padding: "6px 10px",
-                    background: shop.active ? "red" : "green",
-                    color: "white",
-                    border: "none",
-                    borderRadius: 4
-                  }}
-                >
-                  {shop.active ? "Disable" : "Enable"}
-                </button>
-              </td>
+        <table style={{ width: "100%", marginTop: 15 }}>
+          <thead>
+            <tr>
+              <th>Shop</th>
+              <th>Owner</th>
+              <th>Mobile</th>
+              <th>Area</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {shops.map((shop) => (
+              <tr key={shop.id}>
+                <td>{shop.name}</td>
+                <td>{shop.ownerName || "-"}</td>
+                <td>{shop.mobile}</td>
+                <td>{shop.area || "-"}</td>
+                <td>{shop.active ? "Active" : "Disabled"}</td>
+
+                <td>
+                  <button
+                    className={shop.active ? "danger-btn" : "primary-btn"}
+                    onClick={() => toggleShop(shop)}
+                  >
+                    {shop.active ? "Disable" : "Enable"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
-
-const input = {
-  display: "block" as const,
-  marginTop: 10,
-  padding: 10,
-  width: "100%"
-};
-
-const th = {
-  border: "1px solid #ddd",
-  padding: 10,
-  background: "#f5f5f5"
-};
-
-const td = {
-  border: "1px solid #ddd",
-  padding: 8
-};
