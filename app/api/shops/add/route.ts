@@ -13,6 +13,9 @@ export async function POST(req: Request) {
     const address = String(body.address || "").trim();
     const area = String(body.area || "").trim();
 
+    // 👉 auto password generate (IMPORTANT)
+    const password = mobile.slice(-4); // last 4 digit
+
     if (!name || !mobile || !address) {
       return NextResponse.json({
         success: false,
@@ -37,11 +40,15 @@ export async function POST(req: Request) {
         ownerName,
         mobile,
         address,
-        area
+        area,
+        password   // ✅ ADD THIS
       }
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ 
+      success: true,
+      defaultPassword: password // optional show to admin
+    });
 
   } catch (error) {
     return NextResponse.json({
