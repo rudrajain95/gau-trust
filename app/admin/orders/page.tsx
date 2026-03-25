@@ -77,7 +77,7 @@ export default function OrdersPage() {
               <td style={td}>{o.address}</td>
               <td style={td}>{o.shopStatus}</td>
               <td style={td}>{o.deliveryStatus}</td>
-              <td style={td}>{o.deliveryBoy || "-"}</td>
+              <td style={td}>{o.deliveryBoyName || "-"}</td>
               <td style={td}>
                 <button
                   onClick={() => updateShopStatus(o.id, "Accepted")}
