@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 export default function DeliveryDashboardPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [deliveryBoyName, setDeliveryBoyName] = useState("");
+  const [deliveryBoyId, setDeliveryBoyId] = useState("");
 
   useEffect(() => {
     const deliveryLogin = localStorage.getItem("deliveryLogin");
-    const savedName = localStorage.getItem("deliveryBoyName") || "Delivery Boy 1";
+    const savedName = localStorage.getItem("deliveryBoyName") || "";
+    const savedId = localStorage.getItem("deliveryBoyId") || "";
 
     if (!deliveryLogin) {
       window.location.href = "/delivery/login";
@@ -16,11 +18,15 @@ export default function DeliveryDashboardPage() {
     }
 
     setDeliveryBoyName(savedName);
-    loadOrders();
+    setDeliveryBoyId(savedId);
+
+    if (savedId) {
+      loadOrders(savedId);
+    }
   }, []);
 
-  const loadOrders = async () => {
-    const res = await fetch("/api/delivery/orders");
+  const loadOrders = async (id: string) => {
+    const res = await fetch(`/api/delivery/orders?deliveryBoyId=${id}`);
     const data = await res.json();
     setOrders(data);
   };
@@ -34,7 +40,8 @@ export default function DeliveryDashboardPage() {
       body: JSON.stringify({
         id,
         deliveryStatus,
-        deliveryBoy: deliveryBoyName
+        deliveryBoyId,
+        deliveryBoyName
       })
     });
 
@@ -42,29 +49,25 @@ export default function DeliveryDashboardPage() {
 
     if (data.success) {
       alert("Status updated");
-      loadOrders();
+      loadOrders(deliveryBoyId);
     } else {
       alert(data.message);
     }
   };
 
   return (
-    <div style={{ padding: 30, fontFamily: "Arial" }}>
-      <h1>Delivery Boy Dashboard</h1>
+    <div className="page-container">
+      <h1 className="page-title">Delivery Partner Panel</h1>
       <p>Logged in as: <b>{deliveryBoyName}</b></p>
 
-      <table style={{
-        width: "100%",
-        borderCollapse: "collapse",
-        marginTop: 20
-      }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 20 }}>
         <thead>
           <tr>
-            <th style={th}>Customer</th>
+            <th style={th}>Customer Name</th>
             <th style={th}>Mobile</th>
             <th style={th}>Product</th>
-            <th style={th}>Qty</th>
-            <th style={th}>Address</th>
+            <th style={th}>Quantity</th>
+            <th style={th}>Delivery Address</th>
             <th style={th}>Shop Status</th>
             <th style={th}>Delivery Status</th>
             <th style={th}>Action</th>
@@ -93,7 +96,7 @@ export default function DeliveryDashboardPage() {
                   onClick={() => updateDeliveryStatus(o.id, "Out for Delivery")}
                   style={{ ...btnBlue, marginLeft: 8 }}
                 >
-                  Out
+                  Out for Delivery
                 </button>
 
                 <button
@@ -112,14 +115,13 @@ export default function DeliveryDashboardPage() {
         onClick={() => {
           localStorage.removeItem("deliveryLogin");
           localStorage.removeItem("deliveryBoyName");
+          localStorage.removeItem("deliveryBoyId");
           window.location.href = "/delivery/login";
         }}
+        className="card"
         style={{
           marginTop: 25,
           display: "inline-block",
-          padding: 12,
-          border: "1px solid #ddd",
-          borderRadius: 8,
           cursor: "pointer"
         }}
       >
