@@ -18,54 +18,13 @@ model Lead {
   createdAt DateTime @default(now())
 }
 
-model Order {
-
-  id             String   @id @default(cuid())
-
-  shopId         String?
-
-  name           String
-  mobile         String
-  address        String
-
-  latitude       Float?
-  longitude      Float?
-
-  product        String
-  quantity       String
-
-  payment        String   @default("COD")
-
-  amount         Float    @default(0)
-  commission     Float    @default(0)
-  shopEarning    Float    @default(0)
-
-  status         String   @default("Pending")
-
-  shopStatus     String?  @default("Pending")
-
-  deliveryStatus String?  @default("Pending")
-
-  deliveryBoy    String?
-
-  deliveryCharge Float    @default(0)
-
-  createdAt      DateTime @default(now())
-
-  shop           Shop?    @relation(fields: [shopId], references: [id])
-
-}
-
-model Product {
+model Admin {
   id        String   @id @default(cuid())
   name      String
-  price     Float
-  unit      String
-  shopId    String?
+  username  String   @unique
+  password  String
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
-
-  shop      Shop?     @relation(fields: [shopId], references: [id])
 }
 
 model Customer {
@@ -79,7 +38,85 @@ model Customer {
   subscriptionStart DateTime?
   subscriptionEnd   DateTime?
   coins             Int       @default(0)
+  active            Boolean   @default(true)
   createdAt         DateTime  @default(now())
+  orders            Order[]
+}
+
+model Shop {
+  id            String    @id @default(cuid())
+  name          String
+  ownerName     String?
+  mobile        String    @unique
+  address       String
+  area          String?
+  latitude      Float?
+  longitude     Float?
+  password      String
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  products      Product[]
+  orders        Order[]
+}
+
+model DeliveryBoy {
+  id          String   @id @default(cuid())
+  name        String
+  mobile      String   @unique
+  password    String
+  vehicleType String?
+  area        String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  orders      Order[]
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  price     Float
+  unit      String
+  shopId    String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  shop      Shop?    @relation(fields: [shopId], references: [id])
+}
+
+model Order {
+  id              String       @id @default(cuid())
+
+  customerId      String?
+  shopId          String?
+  deliveryBoyId   String?
+
+  name            String
+  mobile          String
+  address         String
+
+  latitude        Float?
+  longitude       Float?
+
+  product         String
+  quantity        String
+
+  payment         String       @default("COD")
+  amount          Float        @default(0)
+  commission      Float        @default(0)
+  shopEarning     Float        @default(0)
+  deliveryCharge  Float        @default(0)
+
+  status          String       @default("Pending")
+  shopStatus      String       @default("Pending")
+  deliveryStatus  String       @default("Pending")
+
+  deliveryBoyName String?
+
+  createdAt       DateTime     @default(now())
+
+  customer        Customer?    @relation(fields: [customerId], references: [id])
+  shop            Shop?        @relation(fields: [shopId], references: [id])
+  deliveryBoy     DeliveryBoy? @relation(fields: [deliveryBoyId], references: [id])
 }
 
 model OtpCode {
@@ -88,20 +125,4 @@ model OtpCode {
   otp       String
   expiresAt DateTime
   createdAt DateTime @default(now())
-}
-
-model Shop {
-  id        String   @id @default(cuid())
-  name      String
-  ownerName String?
-  mobile    String   @unique
-  address   String
-  area      String?
-  latitude  Float?
-  longitude Float?
-  password  String?
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  products  Product[]
-  orders    Order[]
 }
