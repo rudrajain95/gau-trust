@@ -1,20 +1,72 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-font-family: Arial, sans-serif;
-background:#ffffff;
-color:#111;
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  color: #111827;
 }
 
-a{
-text-decoration:none;
-color:inherit;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-button{
-cursor:pointer;
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #0b5ed7;
+}
+
+.page-container {
+  padding: 30px;
+}
+
+.page-title {
+  font-size: 32px;
+  color: #0b5ed7;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+}
+
+.primary-btn {
+  background: #198754;
+  color: white;
+  padding: 10px 16px;
+}
+
+.secondary-btn {
+  background: #0b5ed7;
+  color: white;
+  padding: 10px 16px;
+}
+
+.danger-btn {
+  background: #dc3545;
+  color: white;
+  padding: 10px 16px;
 }
