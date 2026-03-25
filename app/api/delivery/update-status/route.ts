@@ -9,7 +9,8 @@ export async function POST(req: Request) {
 
     const id = String(body.id || "");
     const deliveryStatus = String(body.deliveryStatus || "");
-    const deliveryBoy = String(body.deliveryBoy || "");
+    const deliveryBoyId = String(body.deliveryBoyId || "");
+    const deliveryBoyName = String(body.deliveryBoyName || "");
 
     if (!id || !deliveryStatus) {
       return NextResponse.json({
@@ -36,7 +37,8 @@ export async function POST(req: Request) {
       where: { id },
       data: {
         deliveryStatus,
-        deliveryBoy,
+        deliveryBoyId: deliveryBoyId || null,
+        deliveryBoyName: deliveryBoyName || null,
         status: finalStatus
       }
     });
