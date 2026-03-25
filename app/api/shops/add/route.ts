@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs"; // ✅ ADD THIS
 
 const prisma = new PrismaClient();
 
@@ -13,8 +14,11 @@ export async function POST(req: Request) {
     const address = String(body.address || "").trim();
     const area = String(body.area || "").trim();
 
-    // 👉 auto password generate (IMPORTANT)
-    const password = mobile.slice(-4); // last 4 digit
+    // ✅ STEP 1: raw password (last 4 digit)
+    const rawPassword = mobile.slice(-4);
+
+    // ✅ STEP 2: hash password
+    const password = await bcrypt.hash(rawPassword, 10);
 
     if (!name || !mobile || !address) {
       return NextResponse.json({
@@ -41,13 +45,13 @@ export async function POST(req: Request) {
         mobile,
         address,
         area,
-        password   // ✅ ADD THIS
+        password   // ✅ hashed password save hoga
       }
     });
 
     return NextResponse.json({ 
       success: true,
-      defaultPassword: password // optional show to admin
+      defaultPassword: rawPassword // ✅ admin ko original dikhega
     });
 
   } catch (error) {
