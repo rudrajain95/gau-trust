@@ -7,9 +7,9 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const name = String(body.name || "").trim();
-    const mobile = String(body.mobile || "").trim();
-    const area = String(body.area || "").trim();
+    const name = body.name;
+    const mobile = body.mobile;
+    const area = body.area || "";
 
     if (!name || !mobile) {
       return Response.json({
@@ -17,6 +17,9 @@ export async function POST(req: Request) {
         message: "Missing fields"
       });
     }
+
+    const rawPassword = mobile.slice(-4);
+    const password = await bcrypt.hash(rawPassword, 10);
 
     const existing = await prisma.deliveryBoy.findUnique({
       where: { mobile }
@@ -28,10 +31,6 @@ export async function POST(req: Request) {
         message: "Mobile already exists"
       });
     }
-
-    // password = last 4 digit
-    const rawPassword = mobile.slice(-4);
-    const password = await bcrypt.hash(rawPassword, 10);
 
     await prisma.deliveryBoy.create({
       data: {
